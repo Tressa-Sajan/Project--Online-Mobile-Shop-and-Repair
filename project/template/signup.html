@@ -1,0 +1,254 @@
+{% load static %}
+
+    <head>
+        
+                <title>ONLINE Mobile Shopping - Sign Up Page</title>        
+                <link href="{% static 'css/bootstrap.min.css' %} " rel="stylesheet">
+                <link href="{% static 'css/bootstrap-icons.css' %} " rel="stylesheet">
+                <link rel="stylesheet" href="{% static 'css/slick.css' %} ">
+                <link href="{% static 'css/tooplate-little-fashion.css' %} " rel="stylesheet">
+            </head>
+    
+            <body>
+                <style>
+        body {
+            background-image: url("static/images/image.jpg");
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            color:white;
+        }
+        .text-center, a {
+            color:white; 
+        }
+        .form-error{
+            color:red;
+            font-style: italic;
+            font-size: 18px;
+        }
+        
+    </style>
+                <main >
+                      <div class="col-lg-8 mx-auto col-12"><br><br>
+                            <center><h1>Sign Up</h1></center><br><br>
+                                     <div class="col-lg-8 col-11 mx-auto" >
+                                            <form role="form" action="" method="post" >
+                                                {% csrf_token %}
+        
+                                                <div class="card-body">
+                                                    <form id="registration-form" >
+                                                        <div class="form-group">
+                                                            <label for="username" class="form-label">Username:</label>
+                                                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                                                            <div class="form-error" id="username-error"></div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="email" class="form-label">Email:</label>
+                                                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                                            <div class="form-error" id="email-error"></div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="password" class="form-label">Password:</label>
+                                                            <input type="password" class="form-control" id="password"name="pass1" placeholder="Enter your password" required>
+                                                            <div class="form-error" id="password-error"></div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="confirmPassword" class="form-label"name="pass2">Confirm Password:</label>
+                                                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                                            <div class="form-error" id="confirmPassword-error"></div>
+                                                        </div>
+                                                        <button type="submit" class="btn custom-btn form-control mt-4 mb-3">Create account </button>
+                                                        <p class="text-center">Already have an account? Please <a href="./login">Sign In</a></p>
+                                                        <div class="form-error" id="general-error"></div>
+                                                        <div class="success-message" id="success-message"></div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- Add Bootstrap JS and jQuery CDN (optional) -->
+                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                                <script>
+                                    
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const registrationForm = document.getElementById('registration-form');
+                                        const username = document.getElementById('username');
+                                        const email = document.getElementById('email');
+                                        const password = document.getElementById('password');
+                                        const confirmPassword = document.getElementById('confirmPassword');
+                                        const usernameError = document.getElementById('username-error');
+                                        const emailError = document.getElementById('email-error');
+                                        const passwordError = document.getElementById('password-error');
+                                        const confirmPasswordError = document.getElementById('confirmPassword-error');
+                                        const generalError = document.getElementById('general-error');
+                                        const successMessage = document.getElementById('success-message');
+                            
+                                        // Add event listeners for real-time validation
+                                        username.addEventListener('input', validateUsername);
+                                        email.addEventListener('input', validateEmail);
+                                        password.addEventListener('input', validatePassword);
+                                        confirmPassword.addEventListener('input', validateConfirmPassword);
+                            
+                                        registrationForm.addEventListener('submit', function (e) {
+                                            e.preventDefault();
+                                            clearErrors();
+                            
+                                            const usernameValue = username.value.trim();
+                                            const emailValue = email.value.trim();
+                                            const passwordValue = password.value.trim();
+                                            const confirmPasswordValue = confirmPassword.value.trim();
+                            
+                                            // Perform your validation here
+                                            let valid = true;
+                            
+                                            if (usernameValue.length < 3) {
+                                                setError(usernameError, 'Username must be at least 3 characters.');
+                                                valid = false;
+                                            }
+                                            
+
+                                            if (!isValidEmail(emailValue)) {
+                                                setError(emailError, 'Invalid email address.');
+                                                valid = false;
+                                            }
+                            
+                                            if (passwordValue.length < 6) {
+                                                setError(passwordError, 'Password must be at least 6 characters.');
+                                                valid = false;
+                                            }
+                            
+                                            if (passwordValue !== confirmPasswordValue) {
+                                                setError(confirmPasswordError, 'Passwords do not match.');
+                                                valid = false;
+                                            }
+                            
+                                            if (valid) {
+                                                // Registration is successful
+                                                successMessage.textContent = 'Registration successful!';
+                                                registrationForm.reset();
+                                            } else {
+                                                setError(generalError, 'Please fix the errors.');
+                                            }
+                                        });
+                            
+                                        function isValidEmail(email) {
+                                            // Simple email validation regex
+                                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                            return emailRegex.test(email);
+                                        }
+                            
+                                        function setError(element, message) {
+                                            element.textContent = message;
+                                            element.style.display = 'block';
+                                        }
+                            
+                                        function clearErrors() {
+                                            usernameError.textContent = '';
+                                            emailError.textContent = '';
+                                            passwordError.textContent = '';
+                                            confirmPasswordError.textContent = '';
+                                            generalError.textContent = '';
+                                            successMessage.textContent = '';
+                                        }
+                            
+                                        function validateUsername() {
+                                            const usernameValue = username.value.trim();
+                                            if (usernameValue.length < 3) {
+                                                setError(usernameError, 'Username must be at least 3 characters.');
+                                            } else {
+                                                usernameError.textContent = '';
+                                            }
+                                        }
+                            
+                                        function validateEmail() {
+                                            const emailValue = email.value.trim();
+                                            if (!isValidEmail(emailValue)) {
+                                                setError(emailError, 'Invalid email address.');
+                                            } else {
+                                                emailError.textContent = '';
+                                            }
+                                        }
+                            
+                                        function validatePassword() {
+                                            const passwordValue = password.value.trim();
+                                            if (passwordValue.length < 6) {
+                                                setError(passwordError, 'Password must be at least 6 characters.');
+                                            } else {
+                                                passwordError.textContent = '';
+                                            }
+                                        }
+                            
+                                        function validateConfirmPassword() {
+                                            const confirmPasswordValue = confirmPassword.value.trim();
+                                            const passwordValue = password.value.trim();
+                                            if (confirmPasswordValue !== passwordValue) {
+                                                setError(confirmPasswordError, 'Passwords do not match.');
+                                            } else {
+                                                confirmPasswordError.textContent = '';
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </form>
+                        </div>
+                     </div>
+                </main>
+        
+                <footer class="site-footer">
+                    <div class="container">
+                        <div class="row">
+        
+                            <div class="col-lg-3 col-10 me-auto mb-4">
+                                <h4 class="text-white mb-3"><a href="index.html">ONLINE </a>Mobile Shopping</h4>
+                                <p class="copyright-text text-muted mt-lg-5 mb-4 mb-lg-0">Copyright © 2022 <strong>ONLINE Mobile Shopping</strong></p>
+                                <br>
+                                <p class="copyright-text">Designed by Tressa</a></p>
+                            </div>
+        
+                            <div class="col-lg-5 col-8">
+                                <h5 class="text-white mb-3">Sitemap</h5>
+        
+                                <ul class="footer-menu d-flex flex-wrap">
+                                    <li class="footer-menu-item"><a href="about.html" class="footer-menu-link">Story</a></li>
+        
+                                    <li class="footer-menu-item"><a href="#" class="footer-menu-link">Products</a></li>
+        
+                                    <li class="footer-menu-item"><a href="#" class="footer-menu-link">Privacy policy</a></li>
+        
+                                    <li class="footer-menu-item"><a href="#" class="footer-menu-link">FAQs</a></li>
+        
+                                    <li class="footer-menu-item"><a href="#" class="footer-menu-link">Contact</a></li>
+                                </ul>
+                            </div>
+        
+                            <div class="col-lg-3 col-4">
+                                <h5 class="text-white mb-3">Social</h5>
+        
+                                <ul class="social-icon">
+        
+                                    <li><a href="#" class="social-icon-link bi-youtube"></a></li>
+        
+                                    <li><a href="#" class="social-icon-link bi-whatsapp"></a></li>
+        
+                                    <li><a href="#" class="social-icon-link bi-instagram"></a></li>
+        
+                                    <li><a href="#" class="social-icon-link bi-skype"></a></li>
+                                </ul>
+                            </div>
+        
+                        </div>
+                    </div>
+                </footer>
+        
+        <script src="{% static 'js/jquery.min.js' %} "></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %} "></script>
+        <script src="{% static 'js/Headroom.js' %} "></script>
+        <script src="{% static 'js/jQuery.headroom.js' %} "></script>
+        <script src="{% static 'js/slick.min.js' %} "></script>
+        <script src="{% static 'js/custom.js' %} "></script>
+
+    </body>
+</html>

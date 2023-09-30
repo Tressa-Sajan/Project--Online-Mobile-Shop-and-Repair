@@ -1,0 +1,55 @@
+*{
+  margin:0 ;
+  padding:0 ;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+header{
+  position: fixed;
+  width: 100%;
+  padding: 20px 100px;
+  background: #89CFF0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body{
+  background: url('https://www.minttwist.com/wp-content/uploads/2022/11/810-1580979621.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+  
+}
+.logo{
+  font-size: 1em;
+  color: #03013d;
+  user-select: none;
+}
+.navigation a {
+  position: relative;
+  font-size: 1em;
+  color:#03013d;
+  text-decoration: none;
+  margin-left: 20px;
+}
+/*.navigation a::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 5px;
+}*/
+.navigation .btnLogin-popup{
+  width: 130px;
+  height: 50px;
+  background: transparent;
+  border: 2px solid #fff;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  color:#03013d;
+  margin-left: 20px;
+}

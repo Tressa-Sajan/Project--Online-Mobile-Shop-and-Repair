@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% if message %}
+{% for message in messages %}
+    {{message}}
+{% endfor %}
+
+{% block content %}
+
+<li class="nav-item">
+    <a class="nav-link" href="/about">Feedback</a>
+</li>
+<li class="nav-item dropdown">
+    <a  href="" role="button" data-bs-toggle="dropdown">Settings<i class="bi bi-caret-down-fill"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+        <li><a class="dropdown-item" href="#">MOBILE</a></li>
+        <li><a class="dropdown-item" href="#">MOBILE COVER</a></li>
+    </ul>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/login">Repair</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/signup">Logout</a>
+</li>
+{% endblock content %}

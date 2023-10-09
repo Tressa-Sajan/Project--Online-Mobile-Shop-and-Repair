@@ -10,13 +10,13 @@
         <main>
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
-                    <a class="navbar-brand" href="/index">
+                    <a class="navbar-brand" href="">
                         <strong><span>ONLINE</span> Moblie shopping </strong>
                     </a>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav mx-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/index">Home</a>
+                                <a class="nav-link" href="">Home</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a  href="" role="button" data-bs-toggle="dropdown">Products<i class="bi bi-caret-down-fill"></i></a>
@@ -28,16 +28,16 @@
                             {% block content %}
                             
                             <li class="nav-item">
-                                <a class="nav-link" href="/about">About us</a>
+                                <a class="nav-link" href="{% url 'about' %}">About us</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/contact">Contact us</a>
+                                <a class="nav-link" href="{% url 'contact' %}">Contact us</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/login">Sign-in</a>
+                                <a class="nav-link" href="{% url 'login' %}">Sign-in</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/signup">Sign-up</a>
+                                <a class="nav-link" href="{% url 'signup' %}">Sign-up</a>
                             </li>
                             {% endblock content %}
                         
@@ -65,7 +65,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 col-10 me-auto mb-4">
-                        <h4 class="text-white mb-3"><a href="/index">ONLINE </a>Mobile Shopping</h4>
+                        <h4 class="text-white mb-3"><a href="">ONLINE </a>Mobile Shopping</h4>
                         <p class="copyright-text text-muted mt-lg-5 mb-4 mb-lg-0">Copyright © 2022 <strong>ONLINE Mobile Shopping</strong></p>
                         <br>
                         <p class="copyright-text">Designed by Tressa</a></p>
@@ -73,11 +73,11 @@
                     <div class="col-lg-5 col-8">
                         <h5 class="text-white mb-3">Sitemap</h5>
                         <ul class="footer-menu d-flex flex-wrap">
-                            <li class="footer-menu-item"><a href="/about" class="footer-menu-link">About</a></li>
+                            <li class="footer-menu-item"><a href="{% url 'about' %}" class="footer-menu-link">About</a></li>
                             <li class="footer-menu-item"><a href="#" class="footer-menu-link">Products</a></li>
                             <li class="footer-menu-item"><a href="#" class="footer-menu-link">Privacy policy</a></li>
                             <li class="footer-menu-item"><a href="#" class="footer-menu-link">FAQs</a></li>
-                            <li class="footer-menu-item"><a href="/contact" class="footer-menu-link">Contact</a></li>
+                            <li class="footer-menu-item"><a href="{% url 'contact' %}" class="footer-menu-link">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-3 col-4">

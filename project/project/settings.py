@@ -122,6 +122,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+AUTH_USER_MODEL = 'app.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -134,4 +135,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'tressasajan2024b@mca.ajce.in'
 EMAIL_HOST_PASSWORD = 'katresajan'
 
-AUTH_USER_MODEL = "app.User"
+

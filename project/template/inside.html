@@ -7,7 +7,7 @@
 {% block content %}
 
 <li class="nav-item">
-    <a class="nav-link" href="/about">Feedback</a>
+    <a class="nav-link" href="{% url 'about' %}">Feedback</a>
 </li>
 <li class="nav-item dropdown">
     <a  href="" role="button" data-bs-toggle="dropdown">Settings<i class="bi bi-caret-down-fill"></i></a>
@@ -17,9 +17,9 @@
     </ul>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="/login">Repair</a>
+    <a class="nav-link" href="{% url 'login' %}">Repair</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="/signup">Logout</a>
+    <a class="nav-link" href="{% url 'signup' %}">Logout</a>
 </li>
 {% endblock content %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="account-area mt-70 mb-70">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="basic-login">
+                    <h5>Register</h5>
+                    <form action="{% url 'handleregister' %}" method="post">
+                        {% csrf_token %}
+                        <label for="username">Username or email address <span></span></label>
+                        <input id="username" type="text" placeholder="Enter Username" name="username">
+                        <label for="email-id">Email Address <span></span></label>
+                        <input id="email-id" type="text" placeholder="Email address..." name="email">
+                        <label for="userpass">Password</label>
+                        <input id="aserpass" type="password" placeholder="Enter password..." name="password">
+                        <select class="" name="role" style="width: 100vw;">
+                            <option value="Customer">Customer</option>
+                            <option value="Seller">Seller</option>
+                        </select><br><br>
+                        <div class="login-action mb-10 fix">
+                        </div>
+                        <br>
+                        <button type="submit" class="tp-in-btn w-100">Register</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

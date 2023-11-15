@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect,render
-from app.models import Category, Main_Category,Product, Sub_Category
+from app.models import Category, Main_Category,Product, Product_Image, Sub_Category
 from app.models import User
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -55,7 +55,7 @@ def REGISTER(request):
         
     else:
         return render(request,'account/register.html')
-    
+
 def LOGIN(request):   
     if request.method == "POST":
         username = request.POST.get('username')
@@ -102,6 +102,7 @@ def admin_DashBoard_View(request):
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
 def productDetails(request):
     return redirect('productDetails')
 
@@ -132,20 +133,28 @@ def addProduct(request):
         model = request.POST['model']
         desc = request.POST['description']
         cat = request.POST['c']
-        featured_image = request.POST['productImages']
+        featured_image = request.FILES['productImages']
         cat = Category.objects.get(id=cat)
-        product = Product(
+        new_product = Product(
             product_name = pname,
             price = price,
             Discount = disc,
             total_quantity = stock,
+            Availability = stock,
             Product_information = pinfo,
             model_Name = model,
             Description = desc,
             Categories = cat,
             featured_image = featured_image
         )
-        product.save()
+        new_product.save()
+        product_images = request.FILES.getlist('productImages1')
+        for image in product_images:
+            productImage = Product_Image()
+            productImage.product = new_product
+            productImage.Image_url = image
+            productImage.save()
+        return redirect('addProduct')
     mainCategories = Main_Category.objects.all()
     categories = Category.objects.all()
     subCategories = Sub_Category.objects.all()
@@ -158,3 +167,20 @@ def addProduct(request):
 
 def sellerPage(request):
     return render(request, "Main/seller_Page.html")
+
+def deactivate(request):
+    uid=request.GET['id']
+    user=User.objects.get(id=uid)
+    user.is_active = False
+    user.save()
+    return redirect ('adminDash')
+
+def activate(request):
+    uid=request.GET['id']
+    user=User.objects.get(id=uid)
+    user.is_active=True
+    user.save()
+    return redirect('adminDash')
+
+def productView(request):
+    return render(request, 'Main/products.html')

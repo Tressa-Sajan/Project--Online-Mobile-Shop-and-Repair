@@ -10,7 +10,7 @@
                     <h5>Register</h5>
                     <form action="{% url 'handleregister' %}" method="post">
                         {% csrf_token %}
-                        <label for="username">Username or email address <span></span></label>
+                        <label for="username">Username<span></span></label>
                         <input id="username" type="text" placeholder="Enter Username" name="username">
                         <label for="email-id">Email Address <span></span></label>
                         <input id="email-id" type="text" placeholder="Email address..." name="email">

@@ -196,3 +196,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'wgarget@gmail.com'
 EMAIL_HOST_PASSWORD = 'weor cstx pdpk vojd'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

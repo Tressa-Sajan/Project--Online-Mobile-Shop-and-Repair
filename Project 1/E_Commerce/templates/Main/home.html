@@ -77,9 +77,10 @@
     <div class="row">
         {% if product %}
         {% for p in product %}
+        {% if p.is_authenticated %}
         <div class="col-md-4 p-2">
             <div class="card">
-                <img src="{{p.featured_image}}" class="card-img-top"
+                <img src="{{p.featured_image.url}}" class="card-img-top"
                     alt="Image Alt Text">
                 <div class="card-body">
                     <h5 class="card-title">{{p.product_name}}</h5>
@@ -89,6 +90,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
         {% endif %}
     </div>

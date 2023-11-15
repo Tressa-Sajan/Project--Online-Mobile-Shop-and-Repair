@@ -51,9 +51,10 @@ class Sub_Category(models.Model):
         # return self.name
 
 class Product(models.Model):
+    owner_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     total_quantity = models.IntegerField(null=True)
     Availability = models.IntegerField(null=True)
-    featured_image = models.CharField(max_length=100)
+    featured_image = models.ImageField(upload_to='featured_image', null=True)
     product_name = models.CharField(max_length=100)
     price = models.IntegerField(null=True)
     Discount = models.IntegerField(null=True)
@@ -62,6 +63,7 @@ class Product(models.Model):
     Categories = models.ForeignKey(Category,on_delete=models.CASCADE)
     #Tags = models.CharField(max_length=100)
     Description = RichTextField(null=True)
+    is_authenticated = models.BooleanField(default=False)
     #section = models.ForeignKey(Section,on_delete=models.DO_NOTHING,null=True)
 
     def __str__(self):
@@ -69,7 +71,7 @@ class Product(models.Model):
 
 class Product_Image(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    Image_url = models.CharField(max_length=200)
+    Image_url = models.ImageField(upload_to='products', null=True)
     
 
 class Additional_Information(models.Model):

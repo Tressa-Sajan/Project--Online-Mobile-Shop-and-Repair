@@ -183,4 +183,11 @@ def activate(request):
     return redirect('adminDash')
 
 def productView(request):
-    return render(request, 'Main/products.html')
+    #Product.objects.get(id=1).delete()
+    products=Product.objects.all()
+    data={
+        "products":products
+    }
+    
+    return render(request, 'Main/products.html', data)
+

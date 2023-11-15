@@ -249,8 +249,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% if new_product %}
-                                        {% for p in new_product %}
+                                        {% if products %}
+                                        {% for p in products %}
                                         <tr>
                                           <!--<td><input type="checkbox" name="user_id" value="{{ u.id }}"></td>-->
                                           <td>{{p.product_name}}</td>

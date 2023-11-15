@@ -84,7 +84,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
-                        <!--<a class="collapse-item" href=""> </a>-->
+                        <a class="collapse-item" href="{% url 'products' %}">Listed Products</a>
                         
                     </div>
                 </div>
@@ -242,6 +242,9 @@
                                             <th>Product information</th>
                                             <th>Discount</th>
                                             <th>Total quantity</th>
+                                            <th>Availability</th>
+                                            <th></th>
+                                            <th></th>
                                             
                                         </tr>
                                     </thead>
@@ -253,6 +256,10 @@
                                           <td>{{p.product_name}}</td>
                                           <td>{{p.price}}</td>
                                           <td>{{p.product_information}}</td>
+                                          <td>{{p.total_quantity}}</td>
+                                          <td>{{p.Availability}}</td>
+                                          <td>{{p.}}</td>
+                                          <td>{{p.}}</td>
                                           
                                         </tr>
                                         {% endfor %}

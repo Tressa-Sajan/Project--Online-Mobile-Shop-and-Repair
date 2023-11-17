@@ -95,7 +95,7 @@
             <textarea class="form-control" id="description" name="description" rows="6" required></textarea>
         </div>
 
-        <div class="mb-3">
+        <!--<div class="mb-3">
             <label for="category" class="form-label">Select Main Category</label>
             <select class="form-select" id="category" name="mc" required>
                 <option value="">Select Your Category</option>
@@ -105,13 +105,13 @@
                 {% endfor %}
                 {% endif %}
             </select>
-        </div>
+        </div>-->
 
         <div class="mb-3">
-            <label for="category" class="form-label">Select Category</label>
+            <label for="category" class="form-label">Select Category</label><br>
             <select class="form-select" id="category" name="c" required>
                 <option value="">Select Your Category</option>
-                {% if mc %}
+                {% if c %}
                 {% for m in c %}
                 <option value="{{m.id}}">{{m.name}}</option>
                 {% endfor %}
@@ -119,7 +119,7 @@
             </select>
         </div>
 
-        <div class="mb-3">
+        <!--<div class="mb-3">
             <label for="category" class="form-label">Select Sub Category</label>
             <select class="form-select" id="category" name="sc" required>
                 <option value="">Select Your Category</option>
@@ -129,8 +129,8 @@
                 {% endfor %}
                 {% endif %}
             </select>
-        </div>
-
+        </div>-->
+        <br><br>
         <div class="mb-3">
             <label for="productImages" class="form-label">Featured Image</label>
             <input type="file" class="form-control" id="productImages" name="productImages" required>

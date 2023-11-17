@@ -90,10 +90,11 @@ def LOGIN(request):
 @login_required
 @never_cache
 def admin_DashBoard_View(request):
+    #User.objects.get(id=1).delete()
     data = {
         "users": False
     }
-    # User.objects.get(id=1).delete()
+    
     users = User.objects.exclude(is_superuser=True)
     data['users'] = users
     return render(request, 'Main/admin_dashboard.html', data)
@@ -155,13 +156,13 @@ def addProduct(request):
             productImage.Image_url = image
             productImage.save()
         return redirect('addProduct')
-    mainCategories = Main_Category.objects.all()
+    #mainCategories = Main_Category.objects.all()
     categories = Category.objects.all()
-    subCategories = Sub_Category.objects.all()
+    #subCategories = Sub_Category.objects.all()
     data = {
-        "mc": mainCategories,
+        # "mc": mainCategories,
         "c": categories,
-        "sc": subCategories
+        #"sc": subCategories
     }
     return render(request, "Main/addProduct.html", data)
 

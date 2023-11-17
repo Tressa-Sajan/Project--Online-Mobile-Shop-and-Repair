@@ -84,8 +84,12 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
-                        <a class="collapse-item" href="{% url 'products' %}">Listed Products</a>
-                        
+                        <a class="collapse-item" href="{% url 'products' %}">Products</a>
+                        <a class="collapse-item" href="#">Sellers</a>
+                        <a class="collapse-item" href="#">Customers</a>
+                        <a class="collapse-item" href="#">Category</a>
+                        <a class="collapse-item" href="#">Add Product</a>
+                        <a class="collapse-item" href="#">Add Category</a>
                     </div>
                 </div>
             </li>
@@ -235,17 +239,16 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
+                                    <thead class="table-dark">
                                         <tr>
                                             <!--<th>Select</th>-->
                                             <th>Name</th>
                                             <th>Position</th>
                                             <th>Email</th>
                                             <th>Status</th>
-                                            
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="table-bordered table-hover">
                                         {% if users %}
                                         {% for u in users %}
                                         <tr>
@@ -255,9 +258,9 @@
                                           <td>{{u.email}}</td>
                                           <td>
                                             {% if u.is_active  %}
-                                          <a href="{% url 'deactivate' %}?id={{u.id}}"> Deactivate</a>
+                                          <a href="{% url 'deactivate' %}?id={{u.id}}" class="btn btn-danger"> Deactivate</a>
                                             {% else %}
-                                          <a href="{% url 'activate' %}?id={{u.id}}"> Activate</a>
+                                          <a href="{% url 'activate' %}?id={{u.id}}" class="btn btn-success"> Activate</a>
                                           {% endif %}
 
                                           </td>

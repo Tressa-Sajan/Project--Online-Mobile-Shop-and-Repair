@@ -240,11 +240,12 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th>Owner Name</th>
+                                            <th>Category</th>
                                             <th>Product Name</th>
                                             <th>Price</th>
                                             <th>Product information</th>
                                             <th>Discount</th>
-                                            <th>Total quantity</th>
+                                            
                                             <!--<th></th>
                                             <th></th>
                                             <th></th>-->
@@ -257,12 +258,12 @@
                                         <tr>
                                           <!--<td><input type="checkbox" name="user_id" value="{{ u.id }}"></td>-->
                                           <td>{{p.owner_id.username}}</td>
+                                          <td>{{p.Categories.name}}</td>
                                           <td>{{p.product_name}}</td>
                                           <td>{{p.price}}</td>
                                           <td>{{p.Product_information}}</td>
                                           <td>{{p.total_quantity}}</td>
                                           <!--<td>{{p.}}</td>
-                                          <td>{{p.}}</td>
                                           <td>{{p.}}</td>-->
                                           
                                         </tr>

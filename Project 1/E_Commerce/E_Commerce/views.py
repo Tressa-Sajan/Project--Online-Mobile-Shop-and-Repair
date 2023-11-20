@@ -137,10 +137,11 @@ def addProduct(request):
         featured_image = request.FILES['productImages']
         cat = Category.objects.get(id=cat)
         new_product = Product(
+            owner_id_id = request.user.id,
             product_name = pname,
             price = price,
             Discount = disc,
-            total_quantity = stock,
+            total_quantity = stock, 
             Availability = stock,
             Product_information = pinfo,
             model_Name = model,
@@ -184,7 +185,7 @@ def activate(request):
     return redirect('adminDash')
 
 def productView(request):
-    #Product.objects.get(id=1).delete()
+    #Product.objects.get(id=9).delete()
     products=Product.objects.all()
     data={
         "products":products
@@ -193,8 +194,12 @@ def productView(request):
     return render(request, 'Main/products.html', data)
 
 def category(request):
-    #if request.method == 'POST':
-        #categoryName = request.POST('categoryName')
-        #cat
-    return render(request, 'Main/category.html')
+    if request.method == 'POST':
+        categoryName = request.POST['categoryName']
+        cat = Category()
+        cat.name = categoryName
+        cat.save()
+        return redirect('category')
+    else:
+        return render(request, 'Main/category.html')
 

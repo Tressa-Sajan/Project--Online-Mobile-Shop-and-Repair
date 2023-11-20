@@ -44,6 +44,7 @@ urlpatterns = [
     path('activate/',views.activate, name='activate'),
 
     path('products/', views.productView, name='products'),
+    path('category/', views.category, name='category'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

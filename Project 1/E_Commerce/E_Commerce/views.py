@@ -192,3 +192,9 @@ def productView(request):
     
     return render(request, 'Main/products.html', data)
 
+def category(request):
+    #if request.method == 'POST':
+        #categoryName = request.POST('categoryName')
+        #cat
+    return render(request, 'Main/category.html')
+

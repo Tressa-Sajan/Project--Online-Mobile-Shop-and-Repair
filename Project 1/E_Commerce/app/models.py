@@ -30,12 +30,12 @@ class Main_Category(models.Model):
         return self.name
 
 class Category(models.Model):
-    main_category = models.ForeignKey(Main_Category,on_delete=models.CASCADE)
+    # main_category = models.ForeignKey(Main_Category,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
 
-    def __str__(self):
-        return self.name    + " -- " + self.main_category.name
+    # def __str__(self):
+        # return self.name    + " -- " + self.main_category.name
 
 class Sub_Category(models.Model):
     category = models.ForeignKey(Category,on_delete=models.CASCADE)

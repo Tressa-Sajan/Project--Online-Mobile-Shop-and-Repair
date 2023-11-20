@@ -202,4 +202,8 @@ def category(request):
         return redirect('category')
     else:
         return render(request, 'Main/category.html')
+    
+def viewproduct(request):
+    return render(request, 'Main/ViewProduct.html')
+
 

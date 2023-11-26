@@ -104,9 +104,6 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
-def productDetails(request):
-    return redirect('productDetails')
-
 @login_required
 @never_cache
 def profileSettings(request):

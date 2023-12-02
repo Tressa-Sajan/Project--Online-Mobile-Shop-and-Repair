@@ -1,30 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-
-<div class="account-area mt-70 mb-70">
-    <div class="container">
-
+<style>
+    .account-area{
+        background-image: url('{% static "assets/img/header/11.jpg" %}'); 
+        background-size: 100% 100%; 
+        min-height: 100vh; 
+    }
+    .image-container {
+        display: none;
+    }
+</style>
+<div class="account-area">
+    <BR><BR>
+    <div class="container" >
+        {% if messages %}
+        {% for message in messages %}   
+        {% if message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}                    
+        {% endfor %}                            
+        {% endif %}
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="basic-login">
-                    <h5>Register</h5>
+                    <br><br>
+                    <h3 style="color: white;">REGISTER</h3>
                     <form action="{% url 'handleregister' %}" method="post">
                         {% csrf_token %}
-                        <label for="username">Username<span></span></label>
+                        <label for="username" style="color: white;">Username<span>*</span></label>
                         <input id="username" type="text" placeholder="Enter Username" name="username">
-                        <label for="email-id">Email Address <span></span></label>
+                        <label for="email-id" style="color: white;">Email Address <span>*</span></label>
                         <input id="email-id" type="text" placeholder="Email address..." name="email">
-                        <label for="userpass">Password</label>
+                        <label for="userpass" style="color: white;">Password<span>*</span></label>
                         <input id="aserpass" type="password" placeholder="Enter password..." name="password">
-                        <select class="" name="role" style="width: 100vw;">
+                        <p><label for="username" style="color: white;">Select the role<span>*</span></label></p>
+                        <select name="role" style="width: 100vw;">
+                            <option value="">Select the role</option>
                             <option value="Customer">Customer</option>
                             <option value="Seller">Seller</option>
                         </select><br><br>
                         <div class="login-action mb-10 fix">
                         </div>
                         <br>
-                        <button type="submit" class="tp-in-btn w-100">Register</a>
+                        <button type="submit" class="tp-in-btn w-100">Register<button></button><br><br>
                     </form>
                 </div>
             </div>

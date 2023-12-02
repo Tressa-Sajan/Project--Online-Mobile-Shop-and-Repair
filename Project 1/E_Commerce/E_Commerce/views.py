@@ -37,24 +37,71 @@ def REGISTER(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        userRole = request.POST['role']
-        if User.objects.filter(username = username).exists():
-            messages.error(request,'Username is already exists')
-            return redirect('login')
-        if User.objects.filter(email = email).exists():
-            messages.error(request,'Email is already exists')
-            return redirect('login')
+        userRole = request.POST.get('role')
+
+        # Validation checks for username
+        if not username:
+            messages.error(request, 'Username cannot be empty.')
+            return redirect('handleregister')
+        if not username[0].isupper():
+            messages.error(request, 'Username should start with a capital letter.')
+            return redirect('handleregister')
+        if any(char.isdigit() for char in username):
+            messages.error(request, 'Username cannot contain numbers.')
+            return redirect('handleregister')
+        if ' ' in username:
+            messages.error(request, 'Username cannot contain spaces.')
+            return redirect('reghandleregisterister')
+        if len(username) <= 3:
+            messages.error(request, 'Username should be more than 3 characters.')
+            return redirect('handleregister')
+
+        # Validation checks for email
+        if not email:
+            messages.error(request, 'Email cannot be empty.')
+            return redirect('handleregister')
+        if ' ' in email:
+            messages.error(request, 'Email cannot contain spaces.')
+            return redirect('handleregister')
+        if '@' not in email or '.' not in email:
+            messages.error(request, 'Invalid email format.')
+            return redirect('handleregister')
+
+        # Validation checks for password
+        if not password:
+            messages.error(request, 'Password cannot be empty.')
+            return redirect('handleregister')
+        if ' ' in password:
+            messages.error(request, 'Password cannot contain spaces.')
+            return redirect('handleregister')
+        if '@' not in password or not any(char.isalpha() or char.isdigit() for char in password):
+            messages.error(request, 'Password must contain @, numbers, and alphabets.')
+            return redirect('handleregister')
+
+        # Validation checks for userRole
+        if not userRole:
+            messages.error(request, 'Please select a role.')
+            return redirect('handleregister')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username is already in use.')
+            return redirect('handleregister')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email is already in use.')
+            return redirect('handleregister')
+
         user = User(
-            username = username,
-            email = email,    
-            userRole = userRole
+            username=username,
+            email=email,
+            userRole=userRole
         )
         user.set_password(password)
-        user.save() 
+        user.save()
+        messages.success(request, 'Registration successful. You can now log in.')
         return redirect('login')
-        
     else:
-        return render(request,'account/register.html')
+        return render(request, 'account/register.html')
 
 def LOGIN(request):   
     if request.method == "POST":
@@ -90,7 +137,7 @@ def LOGIN(request):
 @login_required
 @never_cache
 def admin_DashBoard_View(request):
-    #User.objects.get(id=1).delete()
+    #User.objects.get(id=25).delete()
     data = {
         "users": False
     }
@@ -112,8 +159,10 @@ def profileSettings(request):
         userData.username = request.POST['username']
         userData.first_name = request.POST['firstname']
         userData.last_name = request.POST['lastname']
-        userData.email = request.POST['email']
-        userData.save()
+       # userData.place = request.POST['place']
+       # userData.email = request.POST['']
+       # userData.email = request.POST['']
+       # userData.save()
     data = {
         "user": userData
     }
@@ -165,7 +214,11 @@ def addProduct(request):
     return render(request, "Main/addProduct.html", data)
 
 def sellerPage(request):
-    return render(request, "Main/seller_Page.html")
+    if request.user.is_authenticated and request.user.product_set.exists():
+        products = request.user.product_set.all()
+        return render(request, 'Main/seller_page.html', {'products': products})
+    else:
+        return render(request, "Main/seller_Page.html", {'products': None})
 
 def deactivate(request):
     uid=request.GET['id']
@@ -182,7 +235,7 @@ def activate(request):
     return redirect('adminDash')
 
 def productView(request):
-    #Product.objects.get(id=9).delete()
+    #Product.objects.get(id=12).delete()
     products=Product.objects.all()
     data={
         "products":products
@@ -200,7 +253,15 @@ def category(request):
     else:
         return render(request, 'Main/category.html')
     
-def viewproduct(request):
-    return render(request, 'Main/ViewProduct.html')
+def buy(request):
+    return render(request, 'Main/buy.html')
+
+def productViewC(request):
+    if request.user.product_set.exists():
+        products = request.user.product_set.all()
+        return render(request, 'Main/productViewC.html', {'products': products})
+    else:
+        return render(request, 'Main/productViewC.html', {'products': None})
+
 
 

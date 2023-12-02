@@ -95,7 +95,7 @@
                             </div>
                             <div class="block-wishlist action">
                                 <div class="col-xl-4 col-lg-5">
-                                    <a class="icon-link" href="{% url 'viewproduct' %}">
+                                    <a class="icon-link" href="{% url 'sellerPage' %}">
                                         <i class="flaticon-user"></i>
                                         <span class="text"><span class="sub">View</span>Products</span>
                                 </div>
@@ -104,7 +104,7 @@
                             {% endif %}
                             {% endif %}
                             {% if request.user.userRole != 'Seller' %}
-                            <div class="block-wishlist action">
+                            <!--<div class="block-wishlist action">
                                 <div class="col-xl-4 col-lg-5">
                                     <a class="icon-link" href="">
                                         <i class="flaticon-heart"></i>
@@ -119,7 +119,7 @@
                                     <span class="count">0</span>
                                     <span class="text"><span class="sub">Your Cart</span></span>
                                 </a>
-                            </div>
+                            </div>-->
                             {% endif %}
                         </div>
                     </div>
@@ -143,13 +143,13 @@
                                         <li>
                                             <a href="shop.html">{{i.name}} <i class="far fa-angle-down"></i></a>
                                             <ul class="mega-menu">
-                                                {% for cat in i.category_set.all %}
+                                                {% for cat in category_set.all %}
                                                 <li><a href="shop.html" style="color:orange;">{{cat.name}}</a>
-                                                    <ul class="mega-item">
+                                                    <!--<ul class="mega-item">
                                                         {% for sub_cat in cat.sub_category_set.all %}
                                                         <li><a href="product-details.html">{{sub_cat.name}}</a></li>
                                                         {% endfor %}
-                                                    </ul>
+                                                    </ul>-->
                                                 </li>
                                                 {% endfor %}
                                             </ul>

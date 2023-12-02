@@ -1,10 +1,19 @@
 {% extends 'base.html'%}
 {% block content %}
-
 {% load static %}
 <!-- slider-area-start -->
-<!-- <div class="slider-area">
-    <div class="swiper-container slider__active">
+<!-- <div class="slider-area">-->
+    <style>
+        .account-area{
+            background-image: url('{% static "assets/img/header/11.jpg" %}');  
+            background-size: 100% 100%; 
+            min-height: 100vh;
+        }
+        .image-container {
+            display: none;
+        }
+    </style>
+    <!--<div class="swiper-container slider__active">
         <div class="slider-wrapper swiper-wrapper">
             <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="{% static 'assets/img/slider/1.png' %}">
                 <div class="container">
@@ -27,7 +36,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="single-slider swiper-slide slider-height d-flex align-items-center"
                 data-background="{% static 'assets/img/slider/2.png' %}">
                 <div class="container">
@@ -54,28 +62,41 @@
         </div>
     </div>
 </div> -->
-<div class="container p-3">
-    <h1>User Settings</h1>
-    <form action="{% url 'profileSettings' %}" method="post">
+<div class="account-area" ><br><br> 
+    <div class="container p-3">
+        <div class="row justify-content-center">
+        <br><br>
+        <h3 style="color: white;">User Settings</h3>
+        <form action="{% url 'profileSettings' %}" method="post">
         {% csrf_token %}
-        <div class="form-group">
+        <div style="color: white;" class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" value="{{user.username}}">
         </div>
-        <div class="form-group">
+        <div style="color: white;" class="form-group">
             <label for="firstname">First Name:</label>
             <input type="text" id="firstname" name="firstname" value="{{user.first_name}}" placeholder="Enter Your First Name">
         </div>
-        <div class="form-group">
+        <div style="color: white;" class="form-group">
             <label for="lastname">Last Name:</label>
             <input type="text" id="lastname" name="lastname" value="{{user.last_name}}" placeholder="Enter Your Last Name">
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="{{user.email}}">
+        <div style="color: white;" class="form-group">
+            <label for="place">Place:</label>
+            <input type="text" id="place" name="place" value="{{user.place}}">
         </div>
-        <button type="submit" class="btn btn-warning">Update Settings</button>
-    </form>
+        <div style="color: white;" class="form-group">
+            <label for="gender">Gender:</label>
+            <input type="checkbox" id="gender" name="gender" value="{{user.gender}}">
+        </div>
+        <div style="color: white;" class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="{{user.phone}}">
+        </div>
+        <button type="submit" class="btn btn-warning">Update </button>
+        </form>
+        </div>
+    </div>
 </div>
 
 

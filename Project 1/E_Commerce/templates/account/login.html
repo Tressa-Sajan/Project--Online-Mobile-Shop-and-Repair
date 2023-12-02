@@ -1,33 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-
-
-<div class="account-area mt-70 mb-70" >   
-   
-        <div class="container" >
-            {% if messages %}
-            {% for message in messages %}   
-                {% if message.tags == 'error' %}                           
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">                           
-                    {{message}}                                                     
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">                            
-                    <span aria-hidden="true">&times;</span>                            
-                </button>                           
-                </div>                           
-                {% endif %}                            
-            {% endfor %}                            
+<style>
+    .account-area{
+        background-image: url('{% static "assets/img/header/11.jpg" %}');  
+        background-size: 100% 100%; 
+        min-height: 100vh;
+    }
+    .image-container {
+        display: none;
+    }
+</style>
+<div class="account-area" > 
+    <br><br>  
+    <div class="container" >
+        {% if messages %}
+        {% for message in messages %}   
+        {% if message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}                    
+        {% endfor %}                            
         {% endif %}
-            <div class="row justify-content-center">
-                
+        <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="basic-login mb-50">
-                        <h5>Login</h5>
+                        <br><br><br><br>
+                        <h3 style="color: white;">LOGIN</h3>
                         <form action="{% url 'handlelogin' %}" method="post">
                             {% csrf_token %}
-                            <label for="name">Username <span>*</span></label>
+                            <label for="name" style="color: white;">Username <span>*</span></label>
                             <input id="name" type="text" placeholder="Enter Username" name="username">
-                            <label for="pass">Password <span>*</span></label>
+                            <label for="pass" style="color: white;">Password <span>*</span></label>
                             <input id="pass" type="password" placeholder="Enter password..." name="password">
                             <div class="login-action mb-10 fix">
                             <!--<span class="log-rem f-left">
@@ -38,15 +46,11 @@
                                 <a href="">Lost your password?</a>
                             </span>
                             </div>-->
-                            <button type="submit" class="tp-in-btn w-100">log in</button>
-                        </form>
-                    </div>
-                </div>           
-            </div>
-        </div>   
-        
-</div>
-
-                                
-      
+                        <button type="submit" class="tp-in-btn w-100">log in</button>
+                    </form>
+                </div>
+             </div>           
+        </div>
+    </div>     
+</div>    
 {% endblock %}

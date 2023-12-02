@@ -245,6 +245,8 @@
                                             <th>Price</th>
                                             <th>Product information</th>
                                             <th>Discount</th>
+                                            <th>Image</th>
+                                            <th>Image</th>
                                             
                                             <!--<th></th>
                                             <th></th>
@@ -263,11 +265,20 @@
                                           <td>{{p.price}}</td>
                                           <td>{{p.Product_information}}</td>
                                           <td>{{p.total_quantity}}</td>
-                                          <!--<td>{{p.}}</td>
-                                          <td>{{p.}}</td>-->
-                                          
+                                          <td>
+                                            <img src="{{p.featured_image.url}}" style="max-width: 100px; max-height: 100px;">
+                                          </td>
+                                          <td>
+                                            {% for pi in p.product_image_set.all %}
+                                                <img src="{{pi.Image_url.url}}" style="max-width: 100px; max-height: 100px;">
+                                            {% endfor %}
+                                          </td>
                                         </tr>
                                         {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="7">No products available</td>
+                                        </tr>
                                         {% endif %}
                                     </tbody>
                                 </table>
@@ -275,7 +286,6 @@
                         </form> 
                         </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 

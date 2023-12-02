@@ -44,7 +44,9 @@ urlpatterns = [
 
     path('products/', views.productView, name='products'),
     path('category/', views.category, name='category'),
-    path('viewproduct/' , views.viewproduct, name='viewproduct')
+    path('productViewC/', views.productViewC, name='productViewC'),
+    path('buy/', views.buy, name='buy'),
+    
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

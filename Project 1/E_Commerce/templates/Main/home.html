@@ -1,9 +1,8 @@
 {% extends 'base.html'%}
 {% block content %}
-
 {% load static %}
 <!-- slider-area-start -->
-<div class="slider-area-md">
+<!--<div class="slider-area-md">
     <div class="swiper-container slider__active">
         <div class="slider-wrapper swiper-wrapper">
             <div
@@ -72,29 +71,72 @@
             <div class="main-slider-paginations"></div>
         </div>
     </div>
+</div>-->
+<style>
+    .image-container {
+        position: relative;
+        /* Other styles for your container */
+    }
+
+    .search-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff; /* Background color for the button */
+        color: #000000; /* Text color for the button */
+        padding: 10px 20px; /* Adjust padding as needed */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px; /* Adjust font size as needed */
+    }
+</style>
+
+<div class="image-container">
+    <li class="nav-item dropdown no-arrow d-sm-none">
+        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-search fa-fw"></i>
+        </a>
+        <!-- Dropdown - Messages -->
+        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+            aria-labelledby="searchDropdown">
+            <form class="form-inline mr-auto w-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small"placeholder="Search for..." aria-label="Search"aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="search-button">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </li>
 </div>
-<div class="container p-2">
-    <div class="row">
-        {% if product %}
-        {% for p in product %}
-        {% if p.is_authenticated %}
-        <div class="col-md-4 p-2">
-            <div class="card">
-                <img src="{{p.featured_image.url}}" class="card-img-top"
-                    alt="Image Alt Text">
-                <div class="card-body">
-                    <h5 class="card-title">{{p.product_name}}</h5>
-                    <p class="card-text">{{p.model_Name}}</p>
-                    <a href="#" class="btn btn-danger">Buy Now</a>
-                    <a href="#" class="btn btn-info btn-md">+<i class="flaticon-shopping-bag"></i></a>
+    <div class="container p-2">
+        <div class="row">
+            {% if product %}
+            {% for p in product %}
+            {% if p.is_authenticated %}
+            <div class="col-md-4 p-2">
+                <div class="card">
+                    <img src="{{p.featured_image.url}}" class="card-img-top"
+                        alt="Image Alt Text">
+                    <div class="card-body">
+                        <h5 class="card-title">{{p.product_name}}</h5>
+                        <p class="card-text">{{p.model_Name}}</p>
+                        <a href="#" class="btn btn-danger">Buy Now</a>
+                        <a href="#" class="btn btn-info btn-md">+<i class="flaticon-shopping-bag"></i></a>
+                    </div>
                 </div>
             </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
         </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
     </div>
-</div>
+
+
 
 <!-- slider-area-end-->
 

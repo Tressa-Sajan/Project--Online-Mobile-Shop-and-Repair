@@ -63,7 +63,7 @@ class Product(models.Model):
     Categories = models.ForeignKey(Category,on_delete=models.CASCADE)
     #Tags = models.CharField(max_length=100)
     Description = RichTextField(null=True)
-    is_authenticated = models.BooleanField(default=False)
+    is_authenticated = models.BooleanField(default=True)
     #section = models.ForeignKey(Section,on_delete=models.DO_NOTHING,null=True)
 
     def __str__(self):

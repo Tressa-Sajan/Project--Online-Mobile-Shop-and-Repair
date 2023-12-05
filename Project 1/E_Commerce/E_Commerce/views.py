@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect,render
+from django.shortcuts import redirect,render, get_object_or_404
 from app.models import Category, Main_Category,Product, Product_Image, Sub_Category
 from app.models import User
 # from django.contrib.auth.models import User
@@ -17,9 +17,7 @@ def HOME(request):
             # messages.success(request, 'Login successful! Welcome back, {}.'.format(username))
             return redirect('adminDash')
         if request.user.userRole == 'Seller':
-            return redirect('sellerPage')
-     #sliders = slider.objects.all().order_by('-id')[0:3]
-     #banner = banner_area.objects.all().order_by('-id')[0:3]
+            return redirect('seller_page')
     
     main_category = Main_Category.objects.all()
     products = Product.objects.all()
@@ -137,7 +135,7 @@ def LOGIN(request):
 @login_required
 @never_cache
 def admin_DashBoard_View(request):
-    #User.objects.get(id=25).delete()
+    #User.objects.get(id=18).delete()
     data = {
         "users": False
     }
@@ -160,7 +158,7 @@ def profileSettings(request):
         userData.first_name = request.POST['firstname']
         userData.last_name = request.POST['lastname']
        # userData.place = request.POST['place']
-       # userData.email = request.POST['']
+        userData.email = request.POST['email']
        # userData.email = request.POST['']
        # userData.save()
     data = {
@@ -213,7 +211,7 @@ def addProduct(request):
     }
     return render(request, "Main/addProduct.html", data)
 
-def sellerPage(request):
+def seller_page(request):
     if request.user.is_authenticated and request.user.product_set.exists():
         products = request.user.product_set.all()
         return render(request, 'Main/seller_page.html', {'products': products})
@@ -244,6 +242,7 @@ def productView(request):
     return render(request, 'Main/products.html', data)
 
 def category(request):
+    #category.objects.get(id=7).delete()
     if request.method == 'POST':
         categoryName = request.POST['categoryName']
         cat = Category()
@@ -262,6 +261,64 @@ def productViewC(request):
         return render(request, 'Main/productViewC.html', {'products': products})
     else:
         return render(request, 'Main/productViewC.html', {'products': None})
+    
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    # Check if the product belongs to the currently logged-in user
+    if product.owner_id != request.user:
+        messages.error(request, 'You do not have permission to edit this product.')
+        return redirect('seller_page')
+
+    if request.method == 'POST':
+        # Update product details based on the form data
+        product.product_name = request.POST['productName']
+        product.price = request.POST['productPrice']
+        product.Discount = request.POST['productDiscount']
+        product.total_quantity = request.POST['productStock1']
+        product.Availability = request.POST['productStock']
+        product.Product_information = request.POST['productInfo']
+        product.model_Name = request.POST['model']
+        product.Description = request.POST['description']
+        product.Categories = request.POST['c']
+        
+        # Check if a new featured image is provided
+        if 'productImages' in request.FILES:
+            product.featured_image = request.FILES['productImages']
+
+        # Save the changes
+        product.save()
+
+        # Update additional images if provided
+        product_images = request.FILES.getlist('productImages1')
+        for image in product_images:
+            productImage = Product_Image()
+            productImage.product = product
+            productImage.Image_url = image
+            productImage.save()
+
+        messages.success(request, 'Product updated successfully.')
+        return redirect('seller_page')
+
+    # Render the edit product page with current product details
+    categories = Category.objects.all()
+    data = {
+        "product": product,
+        "categories": categories,
+    }
+    return render(request, "Main/edit_product.html", data)
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    # Check if the current user is the owner of the product
+    if request.user == product.owner_id:
+        # Delete the product and associated images
+        product.delete()
+        return redirect('seller_page')  # Replace 'seller_dashboard' with the URL name of your seller dashboard
+    else:
+        # If the current user is not the owner, handle the permission issue (you can customize this part)
+        return render(request, 'error_page.html', {'error_message': 'Permission Denied'})
 
 
 

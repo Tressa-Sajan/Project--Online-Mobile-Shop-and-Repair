@@ -95,7 +95,7 @@
                             </div>
                             <div class="block-wishlist action">
                                 <div class="col-xl-4 col-lg-5">
-                                    <a class="icon-link" href="{% url 'sellerPage' %}">
+                                    <a class="icon-link" href="{% url 'seller_page' %}">
                                         <i class="flaticon-user"></i>
                                         <span class="text"><span class="sub">View</span>Products</span>
                                 </div>
@@ -139,9 +139,9 @@
                             <div class="cat__menu">
                                 <nav id="mobile-menu" style="display: block;">
                                     <ul>
-                                        {% for i in main_category %}
+                                        
                                         <li>
-                                            <a href="shop.html">{{i.name}} <i class="far fa-angle-down"></i></a>
+                                            <a href="shop.html">Mobiles<i class="far fa-angle-down"></i></a>
                                             <ul class="mega-menu">
                                                 {% for cat in category_set.all %}
                                                 <li><a href="shop.html" style="color:orange;">{{cat.name}}</a>
@@ -154,7 +154,6 @@
                                                 {% endfor %}
                                             </ul>
                                         </li>
-                                        {% endfor %}
                                         <!--<li><a href=""></a></li>-->
                                     </ul>
                                 </nav>

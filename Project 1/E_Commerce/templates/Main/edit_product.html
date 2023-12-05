@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .account-area{
+        background-image: url('{% static "assets/img/header/11.jpg" %}');  
+        background-size: 100% 100%; 
+        min-height: 100vh;
+    }
+    .image-container {
+        display: none;
+    }
+</style>
+<div class="account-area"><br><br>
+    <div class="container mt-3 p-3">
+        <div class="col-lg-8">
+            <div style="color: white;">
+                <div>
+                    <h6 >Edit Product</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="productName">Product Name:</label>
+                            <input type="text" class="form-control" id="productName" name="productName" value="{{ product.product_name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Price:</label>
+                            <input type="number" class="form-control" id="productPrice" name="productPrice" value="{{ product.price }}" required>
+                        </div>
+                        <!-- Add other input fields as needed -->
+                        <div class="form-group">
+                            <label for="productPrice">Discount:</label>
+                            <input type="number" class="form-control" id="productDiscount" name="productDiscount" value="{{ product.Discount }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Stock:</label>
+                            <input type="number" class="form-control" id="productStock1" name="productStock1" value="{{ product.total_quantity }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Product Info:</label>
+                            <input type="text" class="form-control" id="productInfo" name="productInfo" value="{{ product.Product_information }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Total:</label>
+                            <input type="text" class="form-control" id="productStock" name="productStock" value="{{ product.Availability }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Model:</label>
+                            <input type="text" class="form-control" id="model" name="model" value="{{ product.model_Name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Categories:</label>
+                            <input type="text" class="form-control" id="c" name="c" value="{{ product.Category }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Description:</label>
+                            <input type="text" class="form-control" id="description" name="description" value="{{ product.Description }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productImages">Featured Image:</label>
+                            <input type="file" class="form-control-file" id="productImages" name="productImages">
+                            <img src="{{ product.featured_image.url }}" style="max-width: 100px; max-height: 100px;">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productImages1">Additional Images:</label>
+                            <input type="file" class="form-control-file" id="productImages1" name="productImages1" multiple>
+                            {% for pi in product.product_image_set.all %}
+                                <img src="{{ pi.Image_url.url }}" style="max-width: 100px; max-height: 100px;">
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

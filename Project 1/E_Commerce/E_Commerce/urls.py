@@ -19,6 +19,7 @@ from django.urls import path, include
 from .import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import delete_product
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,14 +39,16 @@ urlpatterns = [
 
     path('profileSettings/', views.profileSettings, name='profileSettings'),
     path('addProduct/', views.addProduct, name='addProduct'),
-    path('sellerPage/', views.sellerPage, name='sellerPage'),
+    path('seller_page/', views.seller_page, name='seller_page'),
     path('deactivate/',views.deactivate, name='deactivate'),
     path('activate/',views.activate, name='activate'),
 
     path('products/', views.productView, name='products'),
     path('category/', views.category, name='category'),
     path('productViewC/', views.productViewC, name='productViewC'),
-    path('buy/', views.buy, name='buy'),
+    path('edit_product/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('delete_product/<int:product_id>/', delete_product, name='delete_product'),
+ 
     
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

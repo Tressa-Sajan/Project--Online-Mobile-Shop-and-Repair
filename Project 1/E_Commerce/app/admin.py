@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import *
+from django.contrib import admin
+from .models import Product, Cart, CartItem, Order, OrderItem
 # Register your models here.
 class Product_Images(admin.TabularInline):
     model = Product_Image
@@ -42,3 +44,9 @@ admin.site.register(Sub_Category)
 #admin.site.unregister(User)
 # Register the CustomUserAdmin
 admin.site.register(User, CustomUserAdmin)
+
+#admin.site.register(Profile)
+admin.site.register(CartItem)
+admin.site.register(Cart)
+admin.site.register(Order)
+admin.site.register(OrderItem)

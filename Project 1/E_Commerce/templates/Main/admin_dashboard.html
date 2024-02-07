@@ -85,7 +85,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
                         <a class="collapse-item" href="{% url 'products' %}">Listed Products</a>
-                        <a class="collapse-item" href="">Category</a>
+                        <a class="collapse-item" href="#">Category</a>
                         <a class="collapse-item" href="{% url 'category' %}">Add Category</a>
                     </div>
                 </div>
@@ -243,7 +243,7 @@
                                       <td>{{u.email}}</td>
                                       <td>
                                         {% if u.is_active  %}
-                                      <a href="{% url 'deactivate' %}?id={{u.id}}" id="ddet" class="btn btn-danger"> Deactivate</a>
+                                      <a href="{% url 'deactivate' %}?id={{u.id}}" class="btn btn-danger">Deativate</a>
                                         {% else %}
                                       <a href="{% url 'activate' %}?id={{u.id}}" id="ddet" class="btn btn-success"> Activate</a>
                                       {% endif %}

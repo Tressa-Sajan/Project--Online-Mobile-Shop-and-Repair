@@ -103,23 +103,32 @@
                             </div>
                             {% endif %}
                             {% endif %}
+                            
                             {% if request.user.userRole != 'Seller' %}
-                            <!--<div class="block-wishlist action">
+                            <!-- <div class="block-wishlist action">
                                 <div class="col-xl-4 col-lg-5">
                                     <a class="icon-link" href="">
                                         <i class="flaticon-heart"></i>
                                         <span class="count">0</span>
-                                        <span class="text"><span class="sub">Favorite</span></span>
+                                        <span class="text"><span class="sub">Favourite</span></span>
                                 </div>
                                 </a>
-                            </div><br>
+                            </div><br> -->
+                            {% if user.is_authenticated %}
                             <div class="block-cart action">
-                                <a class="icon-link" href="">
+                                <a class="icon-link" href="{% url 'cart' %}">
+                                    <!-- <img src="{% static 'images/cart.png' %}" alt="Cart"> -->
                                     <i class="flaticon-shopping-bag"></i>
+                                    <span class="text"><span class="sub">Cart</span></span>
+                                    
+                                    {% if cart_count == 0 %}
                                     <span class="count">0</span>
-                                    <span class="text"><span class="sub">Your Cart</span></span>
+                                    {% else %}
+                                    <span class="cart-count">({{ cart_count }})</span>
+                                    {% endif %}
                                 </a>
-                            </div>-->
+                            </div>
+                            {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -171,9 +180,6 @@
                                 <ul>
                                     <li>
                                         <a href="{% url 'home' %}">Home</a>
-                                    </li>
-                                    <li>
-                                        <a href="">About Us</a>
                                     </li>
                                 </ul>
                             </nav>

@@ -1,44 +1,85 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block content %}
 {% load static %}
 <style>
-    .account-area{
-        background-image: url('{% static "assets/img/header/11.jpg" %}');  
-        background-size: 100% 100%; 
+    .account-area {
+        background-image: url('{% static "assets/img/header/11.jpg" %}');
+        background-size: 100% 100%;
         min-height: 100vh;
     }
+
     .image-container {
         display: none;
     }
+
+    /* Style for the filter input */
+    #productFilter {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
 </style>
 <!-- slider-area-start -->
-<div class="account-area"><br><br><br><br>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            {% if products %}
-                {% for p in products %}
-                    <div class="card">
-                        <div class="card h-100">
-                            <img src="{{ p.featured_image.url }}" class="card-img-top" >
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ p.product_name }}</h5>
-                                <p class="card-text">{{ p.model_Name }}</p>
-                                <p class="card-text">Price: ${{ p.price }}</p>
-                                <a href="#" class="btn btn-danger">Buy Now</a>
-                                <a href="#" class="btn btn-info btn-md">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-md-12">
-                    <p>No products available for sale.</p>
+<div class="account-area">
+    <br><br><br><br>
+    <input type="text" id="productFilter" placeholder="Filter by Product Name">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% if products %}
+        {% for p in products %}
+        <div class="card">
+            <div class="card h-100">
+                <img src="{{ p.featured_image.url }}" class="card-img-top">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ p.product_name }}</h5>
+                    <p class="card-text">{{ p.model_Name }}</p>
+                    <p class="card-text">Price: ${{ p.price }}</p>
+                    <a href="#" class="btn btn-danger">Buy Now</a>
+                    <a href="{% url 'cart' %}" class="btn btn-info btn-md">Add to Cart</a>
                 </div>
-            {% endif %}
+            </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-md-12">
+            <p>No products available for sale.</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
-
-
-
 <!-- slider-area-end-->
+
+<!-- Add this script at the end of your HTML file, after including jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Function to handle filtering
+        function filterProducts() {
+            var input, filter, cards, card, title, i;
+            input = document.getElementById("productFilter");
+            filter = input.value.toUpperCase();
+            cards = document.getElementsByClassName("card");
+
+            // Loop through all cards, and hide those that don't match the filter
+            for (i = 0; i < cards.length; i++) {
+                card = cards[i];
+                title = card.querySelector(".card-title");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+
+        // Attach an event listener to the input field for real-time filtering
+        $("#productFilter").on("input", function () {
+            filterProducts();
+        });
+    });
+</script>
 
 {% endblock %}

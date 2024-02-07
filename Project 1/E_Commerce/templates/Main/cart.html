@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'assets/css/cart.css' %}"> -->
+<style>
+    .container_p-2{
+        background-image: url('{% static "assets/img/header/11.jpg" %}');  
+        background-size: 100% 100%; 
+        min-height: 100vh;
+    }
+    .image-container {
+        display: none;
+    }
+</style>
+
+<div class="container p-2">
+<center><div class="cart-header"><br><br>
+        <h1>Your Cart</h1>
+    </div></center>
+    <div class="cart-items">
+        {% if cart_items %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.product_name }}</td>
+                            <td>
+                                <form action="{% url 'increase-cart-item' item.product.id %}" method="post" class="d-flex">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-primary" type="submit">+</button>
+                                </form>
+                                <span class="item-quantity mx-2">{{ item.quantity }}</span>
+                                <form action="{% url 'decrease-cart-item' item.product.id %}" method="post" class="d-flex">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-warning" type="submit">-</button>
+                                </form>
+                            </td>                                                                              
+                            <td>${{ item.product.price }}</td>
+                            <td>
+                                <form action="{% url 'remove-from-cart' item.product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-danger" type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="cart-summary">
+                <!-- <p>Total: ${{ item.price.total_amount }}</p> -->
+                <p class="total-price-data"><span id="total-price"></span></p>
+                <a class="btn btn-success checkout-button" href="{% url 'checkout' %}">Checkout</a>
+                <a class="continue-shopping-link btn btn-primary" href="{% url 'home' %}">Continue Shopping</a>
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+            <a class="continue-shopping-link btn btn-primary" href="{% url 'home' %}">Continue Shopping</a><br><br>
+        {% endif %}
+    </div>
+</div><br><br>
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
+

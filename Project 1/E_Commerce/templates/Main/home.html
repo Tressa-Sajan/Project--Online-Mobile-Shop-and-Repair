@@ -74,7 +74,7 @@
 </div>-->
 <style>
     .image-container {
-        position: relative;
+        display: none;
         /* Other styles for your container */
     }
 
@@ -83,7 +83,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: #ffffff; /* Background color for the button */
+        background-color: #9a2020; /* Background color for the button */
         color: #000000; /* Text color for the button */
         padding: 10px 20px; /* Adjust padding as needed */
         border: none;
@@ -91,8 +91,12 @@
         cursor: pointer;
         font-size: 16px; /* Adjust font size as needed */
     }
+    .container_p-2{
+        background-image: url('{% static "assets/img/header/11.jpg" %}');  
+        background-size: 100% 100%; 
+        min-height: 100vh;
+    }
 </style>
-
 <div class="image-container">
     <li class="nav-item dropdown no-arrow d-sm-none">
         <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -113,28 +117,28 @@
         </div>
     </li>
 </div>
-    <div class="container p-2">
-        <div class="row">
-            {% if product %}
-            {% for p in product %}
-            {% if p.is_authenticated %}
-            <div class="col-md-4 p-2">
-                <div class="card">
-                    <img src="{{p.featured_image.url}}" class="card-img-top"
-                        alt="Image Alt Text">
-                    <div class="card-body">
-                        <h5 class="card-title">{{p.product_name}}</h5>
-                        <p class="card-text">{{p.model_Name}}</p>
-                        <a href="#" class="btn btn-danger">Buy Now</a>
-                        <a href="#" class="btn btn-info btn-md">+<i class="flaticon-shopping-bag"></i></a>
-                    </div>
+<div class="container p-2">
+    <div class="row">
+        {% if product %}
+        {% for p in product %}
+        {% if p.is_authenticated %}
+        <div class="col-md-4 p-2">
+            <div class="card">
+                <img src="{{p.featured_image.url}}" class="card-img-top"
+                    alt="Image Alt Text">
+                <div class="card-body">
+                    <h5 class="card-title">{{p.product_name}}</h5>
+                    <p class="card-text">{{p.model_Name}}</p>
+                    <!-- <a href="{% url 'checkout' %}" class="btn btn-danger">Buy Now</a> -->
+                    <a href="{% url 'increase-cart-item' product_id=p.id  %}" class="btn btn-info btn-md">Add to Cart<i class="flaticon-shopping-bag"></i></a>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
         </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
     </div>
+</div>
 
 
 

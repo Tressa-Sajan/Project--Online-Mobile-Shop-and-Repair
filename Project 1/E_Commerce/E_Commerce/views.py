@@ -13,9 +13,6 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import razorpay
 import json
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from django.http import HttpResponse
 
 
 @csrf_exempt
@@ -496,23 +493,27 @@ def buy(request):
 @csrf_exempt
 def order(request):
     user = User.objects.get(id=request.GET["id"])
-    print(user.username)
+    # print(user.username)
     login(request, user)
     if request.user.is_authenticated:
         user = request.user
         cart = user.cart
         cart_items = CartItem.objects.filter(cart=cart)
-        print(cart_items)
+        # print(cart)
+        # for item in cart_items:
+        #     print("Product:", item.product.product_name)
+        #     print("Quantity:", item.quantity)
         total_amount = sum(item.product.price * item.quantity for item in cart_items)
         data = {
-            "cart":cart_items,
-            "total_amount":total_amount
+            "cart_items": cart_items,  # Corrected key name
+            "total_amount": total_amount
         }
         return render(request, 'Main/order.html', data)
     # else:
     #     # Redirect the user to the login page
     #     return redirect('login')
     return HttpResponse("An error occurred")
+
 
 def productViewC(request):
     if request.user.product_set.exists():
@@ -606,7 +607,7 @@ openai.api_key = settings.OPENAI_API_KEY
 
 import openai
 openai.api_key = settings.OPENAI_API_KEY
-openai.api_key = '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'
+openai.api_key = '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'
 print(openai.api_key)
 
 def generate_image_from_txt(request):

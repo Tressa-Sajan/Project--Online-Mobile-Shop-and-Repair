@@ -31,14 +31,12 @@ SECRET_KEY = 'b_z73j80aa!3h9+%ui*ii*bl%(cdw*w-tpukpqngcr7+!_dtw'
 load_dotenv()  # This will load the .env file
 # settings.py
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-# settings.py
-print('OPENAI_API_KEY:', OPENAI_API_KEY)
+
   # This should print out the key if it's properly set
 
 
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 print('OPENAI_API_KEY:', OPENAI_API_KEY) 
 

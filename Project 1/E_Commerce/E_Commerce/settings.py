@@ -13,6 +13,35 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import environ
+from dotenv import load_dotenv
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'b_z73j80aa!3h9+%ui*ii*bl%(cdw*w-tpukpqngcr7+!_dtw'
+
+# OpenAI Key
+#from dotenv import load_dotenv
+load_dotenv()  # This will load the .env file
+# settings.py
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+# settings.py
+print('OPENAI_API_KEY:', OPENAI_API_KEY)
+  # This should print out the key if it's properly set
+
+
+
+OPENAI_API_KEY = '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'
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+print('OPENAI_API_KEY:', OPENAI_API_KEY) 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

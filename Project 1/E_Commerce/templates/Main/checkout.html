@@ -51,7 +51,7 @@
     </table>
     <p>Total Amount: &#8377<span id="total_item_amount">{{total_amount}}</span></p>
     <!-- <button id="rzp-button1">Pay with Razorpay</button><br><br> -->
-    <form action="{% url 'home' %}" method="POST">
+    <form action="{% url 'order' %}?id={{user.id}}" method="POST">
         <script
             src="https://checkout.razorpay.com/v1/checkout.js"
             data-key="rzp_test_KE5hiRXWNUNLRk" 

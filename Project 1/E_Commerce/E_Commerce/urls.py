@@ -20,6 +20,7 @@ from .import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import delete_product
+from .views import generate_image_from_txt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -59,9 +60,16 @@ urlpatterns = [
     path('fetch-cart-count/', views.fetch_cart_count, name='fetch-cart-count'),
     path('create-order/', views.create_order, name='create-order'),
     path('handle-payment/', views.handle_payment, name='handle-payment'),
-    path('checkout/', views.checkout, name='checkout')
-    
+    path('checkout/', views.checkout, name='checkout'),
+    path('order/', views.order, name='order'),
+    path('Design/', views.generate_image_from_txt, name='Design'),
+
+
+# end il ith add cheyyanam
+
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
- 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

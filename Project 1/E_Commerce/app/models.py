@@ -121,5 +121,11 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     item_total = models.DecimalField(max_digits=10, decimal_places=2)
 
+# Image generation
+class Image(models.Model):
+    phrase = models.CharField(max_length=200)
+    ai_image = models.ImageField(upload_to='img/')  # Ensure this matches your MEDIA_ROOT
+
     def __str__(self):
-        return f"{self.quantity} x {self.product.name} in Order {self.order.id}"
+        return self.phrase
+    

@@ -1,0 +1,128 @@
+my urls.py -> " 
+from .views import generate_image_from_txt
+path('Design/', views.generate_image_from_txt, name='Design'),
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA) " 
+
+
+my models.py -> " # Image generation
+class Image(models.Model):
+    phrase = models.CharField(max_length=200)
+    ai_image = models.ImageField(upload_to='img/')  # Ensure this matches your MEDIA_ROOT
+
+    def __str__(self):
+        return self.phrase
+ " 
+
+
+my views.py -> " #Image Generation
+import openai, os, requests
+from django.core.files.base import ContentFile
+from app.models import Image
+from app.models import Image
+load_dotenv()
+api_key = os.getenv("OPENAI_KEY",None)
+openai.api_key = api_key
+import openai
+from django.conf import settings
+from django.shortcuts import render
+from io import BytesIO
+from PIL import Image as PILImage
+from django.http import HttpResponse
+
+
+# views.py or other files
+
+openai.api_key = settings.OPENAI_API_KEY
+
+import openai
+openai.api_key = settings.OPENAI_API_KEY
+openai.api_key = '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'
+print(openai.api_key)
+
+def generate_image_from_txt(request):
+    context = {'image_url': None}
+
+    if hasattr(settings, 'OPENAI_API_KEY') and settings.OPENAI_API_KEY:
+        openai.api_key = settings.OPENAI_API_KEY
+    else:
+        # Handle the absence of API key appropriately
+        print("API Key is not set in settings.")
+        # Maybe return an error message or raise an exception
+
+
+    if request.method == 'POST':
+        user_input = request.POST.get('user_input')
+          
+
+        try:
+            # Call the OpenAI API to generate an image
+            response = openai.Image.create(
+               # model="dall-e-3",
+                prompt=user_input,
+                n=1,
+                size="1024x1024",
+                quality="hd",
+            )
+
+            # Assuming the response contains a direct URL to the image
+            image_data = response
+            image_url = image_data['url']
+
+            # Download the image content
+            image_response = requests.get(image_url)
+            if image_response.status_code == 200:
+                # Create a new Image object without saving it to the database
+                image_content = ContentFile(image_response.content)
+                # You can provide a name to the image file (optional)
+                filename = f"generated_image.png"
+                new_image = Image(phrase=user_input)
+                new_image.ai_image.save(filename, image_content, save=False)
+
+                # Add the new image to the context
+                context['image_url'] = new_image.ai_image.url
+            else:
+                context['error'] = 'Failed to download the image.'
+
+        except openai.error.OpenAIError as e:
+            # Handle exceptions from the OpenAI API
+            context['error'] = str(e)
+        except Exception as e:
+            # Handle any other exceptions
+            context['error'] = str(e)
+
+    # Render the template with the context
+    return render(request, '/Design.html', context) " 
+
+
+my .env -> " OPENAI_KEY='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' " 
+
+
+settings.py -> " import environ
+from dotenv import load_dotenv
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'b_z73j80aa!3h9s+%ui*ii*bl%(cdw*w-tpukpqngcr7+!_dtw'
+
+# OpenAI Key
+#from dotenv import load_dotenv
+load_dotenv()  # This will load the .env file
+# settings.py
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+# settings.py
+print('OPENAI_API_KEY:', OPENAI_API_KEY)
+  # This should print out the key if it's properly set
+
+
+
+OPENAI_API_KEY = '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'
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+print('OPENAI_API_KEY:', OPENAI_API_KEY) "

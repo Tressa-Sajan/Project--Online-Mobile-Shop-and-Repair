@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect,render, get_object_or_404
-from app.models import Category, Main_Category,Product, Product_Image, Sub_Category
+from app.models import Category, Main_Category, Product, Product_Image, Sub_Category
 from app.models import User,Product, Cart, CartItem, Order, OrderItem
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -13,6 +13,9 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import razorpay
 import json
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
 
 
 @csrf_exempt
@@ -54,7 +57,7 @@ def create_order(request):
 @csrf_exempt
 def checkout(request):
     client = razorpay.Client(auth=("rzp_test_KE5hiRXWNUNLRk", "WrlDqvBYnjEIrz67ruEptIVq"))
-
+    print(request.user)
     payment = client.order.create({
     "amount": 50000,
     "currency": "INR",
@@ -80,6 +83,7 @@ def checkout(request):
         'email':email,
         'username': username
     }
+    # request.session["id"]=request.user.id
     return render(request, 'Main/checkout.html', context)
 
 # @csrf_exempt
@@ -188,7 +192,7 @@ def remove_from_cart(request, product_id):
 @login_required(login_url='login')
 def view_cart(request):
     cart = request.user.cart
-    print(cart)
+    print(request.user)
     cart_items = CartItem.objects.filter(cart=cart)
     return render(request, 'Main/cart.html', {'cart_items': cart_items})
 
@@ -246,8 +250,9 @@ def get_cart_count(request):
 def BASE(request):
     return render(request,'base.html')
 
-@csrf_exempt
+
 def HOME(request):
+    # Product.objects.filter(id=16).delete()
     if request.user.is_authenticated:
         if request.user.is_superuser:
             # messages.success(request, 'Login successful! Welcome back, {}.'.format(username))
@@ -466,7 +471,7 @@ def activate(request):
     return redirect('adminDash')
 
 def productView(request):
-    #Product.objects.get(id=16).delete()
+    #Product.objects.filter(id=16).delete()
     products=Product.objects.all()
     data={
         "products":products
@@ -475,7 +480,7 @@ def productView(request):
     return render(request, 'Main/products.html', data)
 
 def category(request):
-    #category.objects.get(id=7).delete()
+    #category.objects.get(id=8).delete()
     if request.method == 'POST':
         categoryName = request.POST['categoryName']
         cat = Category()
@@ -487,6 +492,27 @@ def category(request):
     
 def buy(request):
     return render(request, 'Main/buy.html')
+
+@csrf_exempt
+def order(request):
+    user = User.objects.get(id=request.GET["id"])
+    print(user.username)
+    login(request, user)
+    if request.user.is_authenticated:
+        user = request.user
+        cart = user.cart
+        cart_items = CartItem.objects.filter(cart=cart)
+        print(cart_items)
+        total_amount = sum(item.product.price * item.quantity for item in cart_items)
+        data = {
+            "cart":cart_items,
+            "total_amount":total_amount
+        }
+        return render(request, 'Main/order.html', data)
+    # else:
+    #     # Redirect the user to the login page
+    #     return redirect('login')
+    return HttpResponse("An error occurred")
 
 def productViewC(request):
     if request.user.product_set.exists():
@@ -554,4 +580,85 @@ def delete_product(request, product_id):
         return render(request, 'error_page.html', {'error_message': 'Permission Denied'})
 
 
+# views.py or other files
 
+#Image Generation
+from dotenv import load_dotenv 
+load_dotenv()
+import openai, os, requests
+from django.core.files.base import ContentFile
+from app.models import Image
+from app.models import Image
+
+api_key = os.getenv("OPENAI_KEY",None)
+openai.api_key = api_key
+import openai
+from django.conf import settings
+from django.shortcuts import render
+from io import BytesIO
+from PIL import Image as PILImage
+from django.http import HttpResponse
+
+
+# views.py or other files
+
+openai.api_key = settings.OPENAI_API_KEY
+
+import openai
+openai.api_key = settings.OPENAI_API_KEY
+openai.api_key = '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'
+print(openai.api_key)
+
+def generate_image_from_txt(request):
+    context = {'image_url': None}
+
+    if hasattr(settings, 'OPENAI_API_KEY') and settings.OPENAI_API_KEY:
+        openai.api_key = settings.OPENAI_API_KEY
+    else:
+        # Handle the absence of API key appropriately
+        print("API Key is not set in settings.")
+        # Maybe return an error message or raise an exception
+
+
+    if request.method == 'POST':
+        user_input = request.POST.get('user_input')
+          
+
+        try:
+            # Call the OpenAI API to generate an image
+            response = openai.Image.create(
+               # model="dall-e-3",
+                prompt=user_input,
+                n=1,
+                size="1024x1024",
+                quality="hd",
+            )
+
+            # Assuming the response contains a direct URL to the image
+            image_data = response
+            image_url = image_data['url']
+
+            # Download the image content
+            image_response = requests.get(image_url)
+            if image_response.status_code == 200:
+                # Create a new Image object without saving it to the database
+                image_content = ContentFile(image_response.content)
+                # You can provide a name to the image file (optional)
+                filename = f"generated_image.png"
+                new_image = Image(phrase=user_input)
+                new_image.ai_image.save(filename, image_content, save=False)
+
+                # Add the new image to the context
+                context['image_url'] = new_image.ai_image.url
+            else:
+                context['error'] = 'Failed to download the image.'
+
+        except openai.error.OpenAIError as e:
+            # Handle exceptions from the OpenAI API
+            context['error'] = str(e)
+        except Exception as e:
+            # Handle any other exceptions
+            context['error'] = str(e)
+
+    # Render the template with the context
+    return render(request, 'Main/Design.html', context)

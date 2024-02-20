@@ -62,6 +62,7 @@ urlpatterns = [
     path('handle-payment/', views.handle_payment, name='handle-payment'),
     path('checkout/', views.checkout, name='checkout'),
     path('order/', views.order, name='order'),
+    path('bill_invoice/',views.bill_invoice, name='bill_invoice'),
     path('Design/', views.generate_image_from_txt, name='Design'),
 
 

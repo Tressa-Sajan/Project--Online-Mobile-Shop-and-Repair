@@ -121,14 +121,6 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     item_total = models.DecimalField(max_digits=10, decimal_places=2)
 
-class DeliveryMan(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # Add any additional fields you may need for the delivery man
-
-    def __str__(self):
-        return self.user.username
-
-
 # Image generation
 class Image(models.Model):
     phrase = models.CharField(max_length=200)

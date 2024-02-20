@@ -147,17 +147,17 @@ def handle_payment(request):
     # # Return a proper response for non-POST requests
     # return HttpResponse('Method not allowed', status=405)
 
-@login_required(login_url='login')
-def add_to_cart(request, product_id):
-    product = Product.objects.get(pk=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
+# @login_required(login_url='login')
+# def add_to_cart(request, product_id):
+#     product = Product.objects.get(pk=product_id)
+#     cart, created = Cart.objects.get_or_create(user=request.user)
+#     cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
     
-    if not item_created:
-        cart_item.quantity += 1
-        cart_item.save()
+#     if not item_created:
+#         cart_item.quantity += 1
+#         cart_item.save()
     
-    return redirect('home')
+#     return redirect('home')
 
 
 @login_required(login_url='login')
@@ -580,6 +580,10 @@ def delete_product(request, product_id):
         # If the current user is not the owner, handle the permission issue (you can customize this part)
         return render(request, 'error_page.html', {'error_message': 'Permission Denied'})
 
+def bill_invoice(request):
+    # Fetch the latest order for the logged-in user (or implement your logic)
+    order = Order.objects.filter(user=request.user).latest('created_at')
+    return render(request, 'bill_invoice.html', {'order': order})
 
 # views.py or other files
 

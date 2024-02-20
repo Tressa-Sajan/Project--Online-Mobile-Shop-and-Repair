@@ -36,7 +36,7 @@ load_dotenv()  # This will load the .env file
 
 
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 print('OPENAI_API_KEY:', OPENAI_API_KEY) 
 

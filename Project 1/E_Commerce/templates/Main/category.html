@@ -256,10 +256,8 @@
                                 </thead>
                                 <tbody class="table-bordered table-hover">
                                     {% if category %}
-                                    {% for c in category %}
-                                    <tr>
-                                      <td>{{c.name}}</td>
-                                    </tr>
+                                    {% for category in categories %}
+                                    <li>{{ category.name }}</li>
                                     {% endfor %}
                                     {% else %}
                                     <tr>

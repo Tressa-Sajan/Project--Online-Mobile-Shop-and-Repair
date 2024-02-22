@@ -206,11 +206,19 @@ def view_cart(request):
 @login_required(login_url='login')
 def increase_cart_item(request, product_id):
     product = Product.objects.get(pk=product_id)
-    cart = request.user.cart
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    # cart = request.user.cart
+    if hasattr(request.user, 'cart') and request.user.cart:
+        cart = request.user.cart
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    else:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-    cart_item.quantity += 1
-    cart_item.save()
+        if not item_created:
+            cart_item.quantity += 1
+        else:
+            cart_item.quantity = 1
+        cart_item.save()
 
     return redirect('cart')
 
@@ -490,29 +498,81 @@ def category(request):
 def buy(request):
     return render(request, 'Main/buy.html')
 
+# @csrf_exempt
+# def order(request):
+#     user = User.objects.get(id=request.GET["id"])
+#     order = Order()
+#     order.user = request.user
+#     order.products
+#     # print(user.username)
+#     login(request, user)
+#     user = request.user
+#     cart = user.cart
+#     cart_items = CartItem.objects.filter(cart=cart)
+#     # print(cart)
+#     # for item in cart_items:
+#     #     print("Product:", item.product.product_name)
+#     #     print("Quantity:", item.quantity)
+#     total_amount = sum(item.product.price * item.quantity for item in cart_items)
+#     data = {
+#         "cart_items": cart_items,  # Corrected key name
+#         "total_amount": total_amount
+#     }
+#     return render(request, 'Main/order.html', data)
+#     # else:
+#     #     # Redirect the user to the login page
+#     #     return redirect('login')
+#     # return HttpResponse("An error occurred")
+
+from django.db import transaction
+
 @csrf_exempt
 def order(request):
-    user = User.objects.get(id=request.GET["id"])
-    # print(user.username)
+    # Assuming user is authenticated
+    userId = request.GET['id']
+    user = User.objects.get(id=userId)
     login(request, user)
-    if request.user.is_authenticated:
-        user = request.user
-        cart = user.cart
-        cart_items = CartItem.objects.filter(cart=cart)
-        # print(cart)
-        # for item in cart_items:
-        #     print("Product:", item.product.product_name)
-        #     print("Quantity:", item.quantity)
-        total_amount = sum(item.product.price * item.quantity for item in cart_items)
-        data = {
-            "cart_items": cart_items,  # Corrected key name
-            "total_amount": total_amount
-        }
-        return render(request, 'Main/order.html', data)
-    # else:
-    #     # Redirect the user to the login page
-    #     return redirect('login')
-    return HttpResponse("An error occurred")
+    user = request.user
+    cart = user.cart
+    cart_items = CartItem.objects.filter(cart=cart)
+
+    # Calculate total amount
+    total_amount = sum(item.product.price * item.quantity for item in cart_items)
+
+    # Create the order instance
+    order = Order.objects.create(
+        user=user,
+        total_amount=total_amount
+    )
+
+    # Create order items and associate them with the order
+    with transaction.atomic():
+        for cart_item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=cart_item.product,
+                quantity=cart_item.quantity,
+                item_total=cart_item.product.price * cart_item.quantity
+            )
+            print(cart_item.product)
+            print(cart_item.quantity)
+
+    # Convert cart_items to a list before deleting
+    cart_items_list = list(cart_items)
+
+    # Clear the user's cart after order creation
+    cart_items.delete()
+
+    # Pass necessary data to the template
+    data = {
+        'user': user,
+        'cart_items': cart_items_list,  # Pass the list instead of queryset
+        'total_amount': total_amount,
+    }
+
+    # Render the template with the provided data
+    return render(request, 'Main/order.html', data)
+
 
 
 def productViewC(request):
@@ -582,8 +642,13 @@ def delete_product(request, product_id):
 
 def bill_invoice(request):
     # Fetch the latest order for the logged-in user (or implement your logic)
-    order = Order.objects.filter(user=request.user).latest('created_at')
-    return render(request, 'bill_invoice.html', {'order': order})
+    # order = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user)
+
+    # Assuming you want to fetch the latest order
+    order = orders.latest('created_at') if orders.exists() else None
+    
+    return render(request, 'Main/bill_invoice.html', {'order': order})
 
 # views.py or other files
 

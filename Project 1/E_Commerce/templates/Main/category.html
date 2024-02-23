@@ -255,16 +255,19 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-bordered table-hover">
-                                    {% if category %}
-                                    {% for category in categories %}
-                                    <li>{{ category.name }}</li>
-                                    {% endfor %}
+                                    {% if categories %}
+                                        {% for cat in categories %}
+                                            <tr>
+                                                <td>{{ cat.name }}</td>
+                                            </tr>
+                                        {% endfor %}
                                     {% else %}
-                                    <tr>
-                                        <td colspan="1">No categories available</td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="1">No categories available</td>
+                                        </tr>
                                     {% endif %}
                                 </tbody>
+                                
                             </table>
                         </div><!--</form> -->
                     </div>

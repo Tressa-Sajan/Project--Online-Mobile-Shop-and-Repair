@@ -485,15 +485,17 @@ def productView(request):
     return render(request, 'Main/products.html', data)
 
 def category(request):
-    #category.objects.get(id=8).delete()
     if request.method == 'POST':
-        categoryName = request.POST['categoryName']
-        cat = Category()
-        cat.name = categoryName
-        cat.save()
+        categoryName = request.POST.get('categoryName')  # Use get() to avoid KeyError
+        cat = Category(name=categoryName)  # Create a new Category instance
+        cat.save()  # Save the new category to the database
         return redirect('category')
-    else:
-        return render(request, 'Main/category.html')
+    
+    # Fetch all categories from the database
+    categories = Category.objects.all()
+    
+    # Pass the categories to the template as a context variable
+    return render(request, 'Main/category.html', {'categories': categories})
     
 def buy(request):
     return render(request, 'Main/buy.html')

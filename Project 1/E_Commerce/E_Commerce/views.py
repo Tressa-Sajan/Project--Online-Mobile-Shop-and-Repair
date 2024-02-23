@@ -191,6 +191,8 @@ def view_cart(request):
     cart = request.user.cart
     print(request.user)
     cart_items = CartItem.objects.filter(cart=cart)
+    for item in cart_items:
+        item.total_price = item.product.price * item.quantity
     return render(request, 'Main/cart.html', {'cart_items': cart_items})
 
 # @login_required(login_url='login')

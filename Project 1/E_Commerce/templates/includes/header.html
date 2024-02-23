@@ -22,15 +22,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-5 d-none d-lg-block">
-                        <div class="header-inner-end text-md-end">
-                            <div class="ovic-menu-wrapper">
-                                <ul>
-                                    <li><a href="{% url 'home' %}">About Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -42,10 +33,11 @@
                     <div class="col-sm-3 col-md-3">
                         <div class="header__info">
                             <div class="logo">
-                                <a href="{% url 'home' %}" class="logo-image"><img src="{% static 'assets/img/header/d1.png' %}"></a>
+                                <a href="{% url 'home' %}" class="logo-image"><img src="{% static 'assets/img/header/d11.png' %}"></a>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-xl-4 col-lg-6 col-md-8 col-sm-6">
                         <div class="header-action">
                             {% if not user.is_authenticated %}
@@ -137,7 +129,7 @@
         </div>
     </div>
     </div>
-    <div class="header__bottom">
+    <!-- <div class="header__bottom">
         <div class="container">
             <div class="row g-0 align-items-center">
                 <div class="col-lg-3">
@@ -154,20 +146,20 @@
                                             <ul class="mega-menu">
                                                 {% for cat in category_set.all %}
                                                 <li><a href="shop.html" style="color:orange;">{{cat.name}}</a>
-                                                    <!--<ul class="mega-item">
+                                                    <ul class="mega-item">
                                                         {% for sub_cat in cat.sub_category_set.all %}
                                                         <li><a href="product-details.html">{{sub_cat.name}}</a></li>
                                                         {% endfor %}
-                                                    </ul>-->
+                                                    </ul>
                                                 </li>
                                                 {% endfor %}
                                             </ul>
                                         </li>
-                                        <!--<li><a href=""></a></li>-->
+                                        <li><a href=""></a></li>
                                     </ul>
                                 </nav>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-3">
@@ -188,7 +180,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </header>
 
 <!-- offcanvas area start -->

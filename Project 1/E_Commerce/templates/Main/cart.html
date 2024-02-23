@@ -43,7 +43,13 @@
                                     <button class="btn btn-sm btn-warning" type="submit">-</button>
                                 </form>
                             </td>                                                                              
-                            <td>${{ item.product.price }}</td>
+                            {% for item in cart_items %}
+                            <!-- Your existing HTML code -->
+                            <td>
+                                {{ item.total_price }}
+                            </td>
+                            <!-- Your existing HTML code -->
+                            {% endfor %}
                             <td>
                                 <form action="{% url 'remove-from-cart' item.product.id %}" method="post">
                                     {% csrf_token %}

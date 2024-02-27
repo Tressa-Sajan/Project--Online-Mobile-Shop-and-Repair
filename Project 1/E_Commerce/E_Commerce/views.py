@@ -259,22 +259,38 @@ def BASE(request):
     return render(request,'base.html')
 
 
+from django.db.models import Q
+
 def HOME(request):
-    # Product.objects.filter(id=16).delete()
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            # messages.success(request, 'Login successful! Welcome back, {}.'.format(username))
             return redirect('adminDash')
         if request.user.userRole == 'Seller':
             return redirect('seller_page')
     
     main_category = Main_Category.objects.all()
-    products = Product.objects.all()
+    
+    # Get search query from GET parameters
+    search_query = request.GET.get('q')
+    
+    # Filter products based on search query
+    if search_query:
+        products = Product.objects.filter(
+            Q(product_name__icontains=search_query) | 
+            Q(model_Name__icontains=search_query)
+        )
+    else:
+        products = Product.objects.all()
+    
     context = {
-         'main_category':main_category,
-         'product':products,
-   }
-    return render(request,'Main/home.html',context)
+        'main_category': main_category,
+        'product': products,
+        'search_query': search_query  # Pass search query to template
+    }
+    
+    return render(request, 'Main/home.html', context)
+
+
 
 def REGISTER(request):
     if request.method == "POST":

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .mobile-cover {
+            width: 77.6mm; /* Width of iPhone 14 Pro Max */
+            height: 160.7mm; /* Height of iPhone 14 Pro Max */
+            background-color: #f0f0f0; /* Background color of mobile cover */
+            position: relative;
+            margin: 50px auto;
+            border: 2px solid #000;
+        }
+        .uploaded-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fixed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Successful</h1>
+    
+    <!-- Display the uploaded image on the mobile cover -->
+    <div class="mobile-cover">
+        <img src="{% url 'view_image' image_id %}" alt="Uploaded Image" class="uploaded-image">
+    </div>
+</body>
+</html>

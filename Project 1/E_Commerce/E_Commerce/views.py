@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect,render, get_object_or_404
 from app.models import Category, Main_Category, Product, Product_Image, Sub_Category
-from app.models import User,Product, Cart, CartItem, Order, OrderItem
+from app.models import User,Product, Cart, CartItem, Order, OrderItem, UserProfile, DeliveryAssignment, Image
+from django.db import IntegrityError
 # from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages 
@@ -402,7 +403,7 @@ def LOGIN(request):
 @login_required
 @never_cache
 def admin_DashBoard_View(request):
-    #User.objects.get(id=18).delete()
+    # User.objects.get(id=9).delete()
     data = {
         "users": False
     }
@@ -673,88 +674,95 @@ def bill_invoice(request):
 
     # Assuming you want to fetch the latest order
     order = orders.latest('created_at') if orders.exists() else None
-    
+    # print(order.total_amount)
     return render(request, 'Main/bill_invoice.html', {'order': order})
 
 # views.py or other files
 
-#Image Generation
-from dotenv import load_dotenv 
-load_dotenv()
-import openai, os, requests
-from django.core.files.base import ContentFile
-from app.models import Image
-from app.models import Image
-
-api_key = os.getenv("OPENAI_KEY",None)
-openai.api_key = api_key
-import openai
-from django.conf import settings
-from django.shortcuts import render
-from io import BytesIO
-from PIL import Image as PILImage
-from django.http import HttpResponse
-
-
-# views.py or other files
-
-openai.api_key = settings.OPENAI_API_KEY
-
-import openai
-openai.api_key = settings.OPENAI_API_KEY
-openai.api_key = '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'
-print(openai.api_key)
-
-def generate_image_from_txt(request):
-    context = {'image_url': None}
-
-    if hasattr(settings, 'OPENAI_API_KEY') and settings.OPENAI_API_KEY:
-        openai.api_key = settings.OPENAI_API_KEY
-    else:
-        # Handle the absence of API key appropriately
-        print("API Key is not set in settings.")
-        # Maybe return an error message or raise an exception
-
-
+def admin_create_delivery_man(request):
     if request.method == 'POST':
-        user_input = request.POST.get('user_input')
-          
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        phone_number = request.POST.get('phone_number')
+        
+        try:
+            # Check if the username already exists
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists.')
+                return redirect('admin_create_delivery_man')
+            
+            # Create the user
+            user = User.objects.create_user(username=username, email=email, password=password)
+            
+            # Assign the role of Delivery Man
+            user.userRole = 'Delivery Man'
+            user.save()
+            
+            # Create the user profile with address, city, state, and phone number
+            UserProfile.objects.create(user=user, address=address, city=city, state=state, phone_number=phone_number)
+            
+            messages.success(request, f'Delivery man {username} has been created successfully.')
+            return redirect('adminDash')  # Redirect to admin dashboard or any other appropriate page
+        
+        except IntegrityError:
+            messages.error(request, 'An error occurred while creating the user.')
+            return redirect('admin_create_delivery_man')
+    
+    return render(request, 'Main/admin_create_delivery_man.html')
+
+def assign_delivery(request):
+    # Assuming you have a form submission to assign delivery men to orders
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        delivery_man_id = request.POST.get('delivery_man_id')
 
         try:
-            # Call the OpenAI API to generate an image
-            response = openai.Image.create(
-               # model="dall-e-3",
-                prompt=user_input,
-                n=1,
-                size="1024x1024",
-                quality="hd",
-            )
+            order = Order.objects.get(id=order_id)
+            delivery_man = User.objects.get(id=delivery_man_id)
+            order.delivery_man = delivery_man
+            order.save()
+            return redirect('assign_delivery')  # Redirect to the same page after assigning
+        except Order.DoesNotExist:
+            # Handle the case where the order does not exist
+            pass
 
-            # Assuming the response contains a direct URL to the image
-            image_data = response
-            image_url = image_data['url']
+    # Retrieve orders without a delivery man assigned
+    orders = Order.objects.all()
+    # Retrieve all delivery men (users with the appropriate role, e.g., 'Delivery Man')
+    delivery_men = User.objects.filter(userRole='Delivery Man')
 
-            # Download the image content
-            image_response = requests.get(image_url)
-            if image_response.status_code == 200:
-                # Create a new Image object without saving it to the database
-                image_content = ContentFile(image_response.content)
-                # You can provide a name to the image file (optional)
-                filename = f"generated_image.png"
-                new_image = Image(phrase=user_input)
-                new_image.ai_image.save(filename, image_content, save=False)
+    # Pass the orders without a delivery man and the delivery men to the template
+    return render(request, 'Main/assign_delivery.html', {'orders': orders, 'delivery_men': delivery_men})
 
-                # Add the new image to the context
-                context['image_url'] = new_image.ai_image.url
-            else:
-                context['error'] = 'Failed to download the image.'
+def admin_Order(request):
+    orders = Order.objects.all()  
+    return render(request, 'Main/admin_Order.html', {'orders': orders})
 
-        except openai.error.OpenAIError as e:
-            # Handle exceptions from the OpenAI API
-            context['error'] = str(e)
-        except Exception as e:
-            # Handle any other exceptions
-            context['error'] = str(e)
+def orders_with_delivery_man(request):
+    # Retrieve orders with assigned delivery men
+    orders_with_delivery_man = Order.objects.exclude(delivery_man=None)
 
-    # Render the template with the context
-    return render(request, 'Main/Design.html', context)
+    # Pass the orders to the template
+    return render(request, 'orders_with_delivery_man.html', {'orders': orders_with_delivery_man})
+
+def upload_image(request):
+    if request.method == 'POST':
+        image_data = request.FILES['image'].read()
+        image = Image(image_data=image_data)
+        image.save()
+        return redirect('upload_success', image_id=image.id)  # Pass the image_id to the upload_success view
+    return render(request, 'Main/upload_image.html')
+
+def upload_success(request, image_id):
+    return render(request, 'Main/upload_success.html', {'image_id': image_id}) 
+
+def view_image(request, image_id):
+    image = Image.objects.get(pk=image_id)
+    response = HttpResponse(image.image_data, content_type='image/png')  # Adjust content type based on your image format
+    return response
+
+

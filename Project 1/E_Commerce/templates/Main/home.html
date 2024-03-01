@@ -1,173 +1,102 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<!-- slider-area-start -->
-<!--<div class="slider-area-md">
-    <div class="swiper-container slider__active">
-        <div class="slider-wrapper swiper-wrapper">
-            <div
-                class="single-slider swiper-slide slider-height d-flex align-items-center"
-                data-background="{% static 'assets/img/slider/1.png' %}">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5">
-                            <div class="slider-content">
-                                <div class="slider-top-btn"
-                                    data-animation="fadeInLeft"
-                                    data-delay="1.5s">
-                                    <a href="product-details.html"
-                                        class="st-btn b-radius">HOT DEALS</a>
-                                </div>
-                                <h2 data-animation="fadeInLeft"
-                                    data-delay="1.7s"
-                                    class="pt-15 slider-title pb-5">SALE
-                                    {{i.SALE}}% OFF <br> {{i.Brand_Name}}</h2>
-                                <p class="pr-20 slider_text"
-                                    data-animation="fadeInLeft"
-                                    data-delay="1.9s">Discount
-                                    {{i.Discount}}% On Products & Free Shipping</p>
-                                <div class="slider-bottom-btn mt-75">
-                                    <a data-animation="fadeInUp"
-                                        data-delay="1.15s" href="{{i.Link}}"
-                                        class="st-btn-b b-radius">Discover now</a>
-                                </div>
-                            </div>
+        <style>
+            .image-container {
+                display: none;
+                /* Other styles for your container */
+            }
+            body {
+                background-image: url('{% static "assets/img/header/11.jpg" %}');
+                background-size: cover;
+                background-position: center;
+                min-height: 100vh;
+                padding: 20px;
+            }
+        
+            .product-card {
+                background-color: #fff;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease-in-out;
+                height: 650px;
+            }
+        
+            .product-card:hover {
+                transform: translateY(-5px);
+            }
+        
+            .product-card img {
+                height: 500px;
+                object-fit: cover;
+                border-bottom: 1px solid #eee;
+            }
+        
+            .product-card .card-body {
+                padding: 15px;
+            }
+        
+            .product-card .card-title {
+                font-size: 17px;
+                font-weight: bold;
+                color: #333;
+            }
+        
+            .product-card .card-text {
+                color: #666;
+            }
+        
+            .product-card .btn {
+                width: 100%;
+            }
+            .search-form {
+                max-width: 400px; /* Adjust the maximum width of the search form */
+                margin: 0 auto; /* Center the search form horizontally */
+            }
+        
+            .search-button {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+        
+            /* Optional: Add some padding to the search input field */
+            .form-control {
+                padding: 12px;
+            }
+        
+        </style>
+        <div class="container mt-3">
+            <!-- Search form -->
+            <form method="GET" action="{% url 'home' %}" class="search-form">
+                <div class="input-group">
+                    <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search for products...">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary search-button"> Search </button>
+                    </div>
+                </div>
+            </form>
+        </div><br>
+        <div class="container">
+            <div class="row">
+                {% if product %}
+                {% for p in product %}
+                {% if p.is_authenticated %}
+                <div class="col-md-4 mb-4">
+                    <div class="product-card">
+                        <img src="{{ p.featured_image.url }}" class="card-img-top" alt="Image Alt Text">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ p.product_name }}</h5>
+                            <p class="card-text">{{ p.model_Name }}</p>
+                            <a href="{% url 'increase-cart-item' product_id=p.id %}" class="btn btn-info btn-md">Add to Cart <i class="flaticon-shopping-bag"></i></a>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div
-                class="single-slider swiper-slide slider-height d-flex align-items-center"
-                data-background="{% static 'assets/img/slider/2.png' %}">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5">
-                            <div class="slider-content">
-                                <div class="slider-top-btn"
-                                    data-animation="fadeInLeft"
-                                    data-delay="1.5s">
-                                    <a href="product-details.html"
-                                        class="st-btn b-radius">New Arrivals</a>
-                                </div>
-                                <h2 data-animation="fadeInLeft"
-                                    data-delay="1.7s"
-                                    class="pt-15 slider-title pb-5">SALE
-                                    {{i.SALE}}% OFF <br> {{i.Brand_Name}}</h2>
-                                <p class="pr-20 slider_text"
-                                    data-animation="fadeInLeft"
-                                    data-delay="1.9s">Discount
-                                    {{i.Discount}}% On Products & Free Shipping</p>
-                                <div class="slider-bottom-btn mt-75">
-                                    <a data-animation="fadeInUp"
-                                        data-delay="1.15s" href="{{i.Link}}"
-                                        class="st-btn-b b-radius">Discover now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="main-slider-paginations"></div>
-        </div>
-    </div>
-</div>-->
-<style>
-    .image-container {
-        display: none;
-        /* Other styles for your container */
-    }
-    body {
-        background-image: url('{% static "assets/img/header/11.jpg" %}');
-        background-size: cover;
-        background-position: center;
-        min-height: 100vh;
-        padding: 20px;
-    }
-
-    .product-card {
-        background-color: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
-        height: 650px;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .product-card img {
-        height: 500px;
-        object-fit: cover;
-        border-bottom: 1px solid #eee;
-    }
-
-    .product-card .card-body {
-        padding: 15px;
-    }
-
-    .product-card .card-title {
-        font-size: 17px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .product-card .card-text {
-        color: #666;
-    }
-
-    .product-card .btn {
-        width: 100%;
-    }
-    .search-form {
-        max-width: 400px; /* Adjust the maximum width of the search form */
-        margin: 0 auto; /* Center the search form horizontally */
-    }
-
-    .search-button {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    /* Optional: Add some padding to the search input field */
-    .form-control {
-        padding: 12px;
-    }
-
-</style>
-<div class="container mt-3">
-    <!-- Search form -->
-    <form method="GET" action="{% url 'home' %}" class="search-form">
-        <div class="input-group">
-            <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search for products...">
-            <div class="input-group-append">
-                <button type="submit" class="btn btn-primary search-button"> Search </button>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
             </div>
         </div>
-    </form>
-</div><br>
-<div class="container">
-    <div class="row">
-        {% if product %}
-        {% for p in product %}
-        {% if p.is_authenticated %}
-        <div class="col-md-4 mb-4">
-            <div class="product-card">
-                <img src="{{ p.featured_image.url }}" class="card-img-top" alt="Image Alt Text">
-                <div class="card-body">
-                    <h5 class="card-title">{{ p.product_name }}</h5>
-                    <p class="card-text">{{ p.model_Name }}</p>
-                    <a href="{% url 'increase-cart-item' product_id=p.id %}" class="btn btn-info btn-md">Add to Cart <i class="flaticon-shopping-bag"></i></a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-    </div>
-</div>
 
 
 <!-- slider-area-end-->

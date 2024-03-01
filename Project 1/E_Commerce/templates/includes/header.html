@@ -1,215 +1,214 @@
 {% load static %}
-<!-- header-start -->
-<header class="header" style="background-color: #101629;">
-    <div class="header-top">
-        <div class="container">
-            <div class="header-inner">
-                <div class="row align-items-center">
-                    <div class="col-xl-6 col-lg-7">
-                        <div class="header-inner-start">
-                            <div class="support d-none d-sm-block">
-                                {% if user.is_authenticated %}
-                                <p>Welcome
-                                    {% if user.first_name == "" %}
-                                    {{user.email}}
-                                    {% else %}
-                                    {{user.first_name}} {{user.last_name}}
-                                    {% endif %}
-                                </p>
-                                {% else %}
-                                <a href="{% url 'handlelogin' %}"><p>Please do Login First...</p></a>
-                                {% endif %}
+<html>
+        <!-- header-start -->
+        <header class="header" style="background-color: #101629;">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-inner">
+                        <div class="row align-items-center">
+                            <div class="col-xl-6 col-lg-7">
+                                <div class="header-inner-start">
+                                    <div class="support d-none d-sm-block">
+                                        {% if user.is_authenticated %}
+                                        <p>Welcome
+                                            {% if user.first_name == "" %}
+                                            {{user.email}}
+                                            {% else %}
+                                            {{user.first_name}} {{user.last_name}}
+                                            {% endif %}
+                                        </p>
+                                        {% else %}
+                                        <a href="{% url 'handlelogin' %}"><p>Please do Login First...</p></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="header-mid">
-        <div class="container">
-            <div class="heade-mid-inner">
-                <div class="row justify-content-between">
-                    <div class="col-sm-3 col-md-3">
-                        <div class="header__info">
-                            <div class="logo">
-                                <a href="{% url 'home' %}" class="logo-image"><img src="{% static 'assets/img/header/d11.png' %}"></a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-4 col-lg-6 col-md-8 col-sm-6">
-                        <div class="header-action">
-                            {% if not user.is_authenticated %}
-                            <div class="block-userlink">
-                                <a class="icon-link" href="{% url 'handlelogin' %}">
-                                    <i class="flaticon-user"></i>
-                                    <span class="text">
-                                        <span class="sub">Login </span>
-                                    </span>
-                                </a>
+            <div class="header-mid">
+                <div class="container">
+                    <div class="heade-mid-inner">
+                        <div class="row justify-content-between">
+                            <div class="col-sm-3 col-md-3">
+                                <div class="header__info">
+                                    <div class="logo">
+                                        <a href="{% url 'home' %}" class="logo-image"><img src="{% static 'assets/img/header/d11.png' %}"></a>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="block-userlink">
-                                <a class="icon-link" href="{% url 'handleregister' %}">
-                                    <i class="flaticon-user"></i>
-                                    <span class="text">
-                                        <span class="sub">Register </span>
-                                    </span>
-                                </a>
-                            </div>
-                            {% else %}
-                            <div class="block-userlink">
-                                <a class="icon-link" href="{% url 'logout' %}">
-                                    <i class="flaticon-user"></i>
-                                    <span class="text">
-                                        <span class="sub">Logout</span>
-                                    </span>
-                                </a>
-                            </div><br>
-                            <div class="block-wishlist action">
-                                <div class="col-xl-4 col-lg-5">
-                                    <a class="icon-link" href="{% url 'profileSettings' %}">
-                                        <i class="flaticon-user"></i>
-                                        <!--<span class="count"></span>-->
-                                        <span class="text"><span class="sub">Profile</span>Settings</span>
-                                </div>
-                                </a>
-                            </div>
-                            {% if request.user.userRole == 'Seller' %}
-                            <div class="block-wishlist action">
-                                <div class="col-xl-4 col-lg-5">
-                                    <a class="icon-link" href="{% url 'addProduct' %}">
-                                        <i class="flaticon-user"></i>
-                                        <span class="text"><span class="sub">Add</span>Products</span>
-                                </div>
-                                </a>
-                            </div>
-                            <div class="block-wishlist action">
-                                <div class="col-xl-4 col-lg-5">
-                                    <a class="icon-link" href="{% url 'seller_page' %}">
-                                        <i class="flaticon-user"></i>
-                                        <span class="text"><span class="sub">View</span>Products</span>
-                                </div>
-                                </a>
-                            </div>
-                            {% endif %}
-                            {% endif %}
-                            
-                            {% if request.user.userRole != 'Seller' %}
-                            <!-- <div class="block-wishlist action">
-                                <div class="col-xl-4 col-lg-5">
-                                    <a class="icon-link" href="">
-                                        <i class="flaticon-heart"></i>
-                                        <span class="count">0</span>
-                                        <span class="text"><span class="sub">Favourite</span></span>
-                                </div>
-                                </a>
-                            </div><br> -->
-                            {% if user.is_authenticated %}
-                            <div class="block-cart action">
-                                <a class="icon-link" href="{% url 'cart' %}">
-                                    <!-- <img src="{% static 'images/cart.png' %}" alt="Cart"> -->
-                                    <i class="flaticon-shopping-bag"></i>
-                                    <span class="text"><span class="sub">Cart</span></span>
-                                    
-                                    {% if cart_count == 0 %}
-                                    <span class="count">0</span>
+                            <div class="col-xl-4 col-lg-6 col-md-8 col-sm-6">
+                                <div class="header-action">
+                                    {% if not user.is_authenticated %}
+                                    <div class="block-userlink">
+                                        <a class="icon-link" href="{% url 'handlelogin' %}">
+                                            <i class="flaticon-user"></i>
+                                            <span class="text">
+                                                <span class="sub">Login </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="block-userlink">
+                                        <a class="icon-link" href="{% url 'handleregister' %}">
+                                            <i class="flaticon-user"></i>
+                                            <span class="text">
+                                                <span class="sub">Register </span>
+                                            </span>
+                                        </a>
+                                    </div>
                                     {% else %}
-                                    <span class="cart-count">( {{ cart_count }} )</span>
+                                    <div class="block-userlink">
+                                        <a class="icon-link" href="{% url 'logout' %}">
+                                            <i class="flaticon-user"></i>
+                                            <span class="text">
+                                                <span class="sub">Logout</span>
+                                            </span>
+                                        </a>
+                                    </div><br>
+                                    <div class="block-wishlist action">
+                                        <div class="col-xl-4 col-lg-5">
+                                            <a class="icon-link" href="{% url 'profileSettings' %}">
+                                                <i class="flaticon-user"></i>
+                                                <!--<span class="count"></span>-->
+                                                <span class="text"><span class="sub">Profile</span>Settings</span>
+                                        </div>
+                                        </a>
+                                    </div>
+                                    {% if request.user.userRole == 'Seller' %}
+                                    <div class="block-wishlist action">
+                                        <div class="col-xl-4 col-lg-5">
+                                            <a class="icon-link" href="{% url 'addProduct' %}">
+                                                <i class="flaticon-user"></i>
+                                                <span class="text"><span class="sub">Add</span>Products</span>
+                                        </div>
+                                        </a>
+                                    </div>
+                                    <div class="block-wishlist action">
+                                        <div class="col-xl-4 col-lg-5">
+                                            <a class="icon-link" href="{% url 'seller_page' %}">
+                                                <i class="flaticon-user"></i>
+                                                <span class="text"><span class="sub">View</span>Products</span>
+                                        </div>
+                                        </a>
+                                    </div>
                                     {% endif %}
-                                </a>
+                                    {% endif %}
+
+                                    {% if request.user.userRole != 'Seller' %}
+                                    <!-- <div class="block-wishlist action">
+                                        <div class="col-xl-4 col-lg-5">
+                                            <a class="icon-link" href="">
+                                                <i class="flaticon-heart"></i>
+                                                <span class="count">0</span>
+                                                <span class="text"><span class="sub">Favourite</span></span>
+                                        </div>
+                                        </a>
+                                    </div><br> -->
+                                    {% if user.is_authenticated %}
+                                    <div class="block-cart action">
+                                        <a class="icon-link" href="{% url 'cart' %}">
+                                            <!-- <img src="{% static 'images/cart.png' %}" alt="Cart"> -->
+                                            <i class="flaticon-shopping-bag"></i>
+                                            <span class="text"><span class="sub">Cart</span></span>
+
+                                            {% if cart_count == 0 %}
+                                            <span class="count">0</span>
+                                            {% else %}
+                                            <span class="cart-count">( {{ cart_count }} )</span>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
                             </div>
-                            {% endif %}
-                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    </div>
-    <!-- <div class="header__bottom">
-        <div class="container">
-            <div class="row g-0 align-items-center">
-                <div class="col-lg-3">
-                    <div class="cat__menu-wrapper side-border d-none d-lg-block">
-                        <div class="cat-toggle">
-                            <button type="button" class="cat-toggle-btn cat-toggle-btn-1"><i
-                                    class="fal fa-bars"></i>ELECTRONICS</button>
-                            <div class="cat__menu">
-                                <nav id="mobile-menu" style="display: block;">
-                                    <ul>
-                                        
-                                        <li>
-                                            <a href="shop.html">Mobiles<i class="far fa-angle-down"></i></a>
-                                            <ul class="mega-menu">
-                                                {% for cat in category_set.all %}
-                                                <li><a href="shop.html" style="color:orange;">{{cat.name}}</a>
-                                                    <ul class="mega-item">
-                                                        {% for sub_cat in cat.sub_category_set.all %}
-                                                        <li><a href="product-details.html">{{sub_cat.name}}</a></li>
+            <!-- <div class="header__bottom">
+                <div class="container">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-lg-3">
+                            <div class="cat__menu-wrapper side-border d-none d-lg-block">
+                                <div class="cat-toggle">
+                                    <button type="button" class="cat-toggle-btn cat-toggle-btn-1"><i
+                                            class="fal fa-bars"></i>ELECTRONICS</button>
+                                    <div class="cat__menu">
+                                        <nav id="mobile-menu" style="display: block;">
+                                            <ul>
+
+                                                <li>
+                                                    <a href="shop.html">Mobiles<i class="far fa-angle-down"></i></a>
+                                                    <ul class="mega-menu">
+                                                        {% for cat in category_set.all %}
+                                                        <li><a href="shop.html" style="color:orange;">{{cat.name}}</a>
+                                                            <ul class="mega-item">
+                                                                {% for sub_cat in cat.sub_category_set.all %}
+                                                                <li><a href="product-details.html">{{sub_cat.name}}</a></li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </li>
                                                         {% endfor %}
                                                     </ul>
                                                 </li>
-                                                {% endfor %}
+                                                <li><a href=""></a></li>
                                             </ul>
-                                        </li>
-                                        <li><a href=""></a></li>
-                                    </ul>
-                                </nav>
+                                        </nav>
+                                    </div>
+                                </div> 
                             </div>
-                        </div> 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-3">
+                            <div class="header__bottom-left d-flex d-xl-block align-items-center">
+                                <div class="side-menu d-lg-none mr-20">
+                                    <button type="button" class="side-menu-btn offcanvas-toggle-btn"><i class="fas fa-bars"></i></button>
+                                </div>
+                                <div class="main-menu d-none d-lg-block">
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'home' %}">Home</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-3">
-                    <div class="header__bottom-left d-flex d-xl-block align-items-center">
-                        <div class="side-menu d-lg-none mr-20">
-                            <button type="button" class="side-menu-btn offcanvas-toggle-btn"><i class="fas fa-bars"></i></button>
-                        </div>
-                        <div class="main-menu d-none d-lg-block">
-                            <nav>
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'home' %}">Home</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+            </div> -->
+        </header>
+
+        <!-- offcanvas area start -->
+        <div class="offcanvas__area">
+            <div class="offcanvas__wrapper">
+                <div class="offcanvas__close">
+                    <button class="offcanvas__close-btn" id="offcanvas__close-btn">
+                        <i class="fal fa-times"></i>
+                    </button>
+                </div>
+                <div class="offcanvas__content">
+                    <div class="offcanvas__logo mb-40">
+                        <a href="index.html">
+                            <img src="{% static 'assets/img/logo/logo-white.png' %}" alt="logo">
+                        </a>
                     </div>
+                    <div class="offcanvas__search mb-25">
+                        <form action="#">
+                            <input type="text" placeholder="What are you searching for?">
+                            <button type="submit"><i class="far fa-search"></i></button>
+                        </form>
+                    </div>
+                    <div class="mobile-menu fix"></div>
+                    <div class="offcanvas__action"></div>
                 </div>
             </div>
         </div>
-    </div> -->
-</header>
-
-<!-- offcanvas area start -->
-<div class="offcanvas__area">
-    <div class="offcanvas__wrapper">
-        <div class="offcanvas__close">
-            <button class="offcanvas__close-btn" id="offcanvas__close-btn">
-                <i class="fal fa-times"></i>
-            </button>
-        </div>
-        <div class="offcanvas__content">
-            <div class="offcanvas__logo mb-40">
-                <a href="index.html">
-                    <img src="{% static 'assets/img/logo/logo-white.png' %}" alt="logo">
-                </a>
-            </div>
-            <div class="offcanvas__search mb-25">
-                <form action="#">
-                    <input type="text" placeholder="What are you searching for?">
-                    <button type="submit"><i class="far fa-search"></i></button>
-                </form>
-            </div>
-            <div class="mobile-menu fix"></div>
-            <div class="offcanvas__action">
-
-            </div>
-        </div>
-    </div>
-</div>
-<!-- offcanvas area end  -->
-<div class="body-overlay"></div>
-<!-- offcanvas area end -->
+        <!-- offcanvas area end  -->
+        <div class="body-overlay"></div>
+        <!-- offcanvas area end -->
+</html>

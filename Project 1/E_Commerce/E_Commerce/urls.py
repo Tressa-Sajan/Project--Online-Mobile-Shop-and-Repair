@@ -20,7 +20,6 @@ from .import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import delete_product
-from .views import generate_image_from_txt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -63,9 +62,14 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('order/', views.order, name='order'),
     path('bill_invoice/',views.bill_invoice, name='bill_invoice'),
-    path('Design/', views.generate_image_from_txt, name='Design'),
 
+    path('admin_create_delivery_man/', views.admin_create_delivery_man, name='admin_create_delivery_man'),
+    path('assign-delivery/', views.assign_delivery, name='assign_delivery'),
+    path('admin_Order/',views.admin_Order, name='admin_Order'),
 
+    path('upload_image/',views.upload_image, name='upload_image'),
+    path('upload/success/<int:image_id>/', views.upload_success, name='upload_success'),  # Add the URL pattern for upload_success
+    path('image/<int:image_id>/', views.view_image, name='view_image'),
 # end il ith add cheyyanam
 
 

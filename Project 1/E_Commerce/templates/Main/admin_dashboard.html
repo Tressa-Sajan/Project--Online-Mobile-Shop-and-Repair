@@ -84,8 +84,11 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
+                        <a class="collapse-item" href="{% url 'adminDash' %}">View Role</a>
                         <a class="collapse-item" href="{% url 'products' %}">View Products</a>
-                        <!-- <a class="collapse-item" href="#">Category</a> -->
+                        <a class="collapse-item" href="{% url 'admin_Order' %}">View Order</a>
+                        <a class="collapse-item" href="{% url 'admin_create_delivery_man' %}">Add Delivery Man</a>
+                        <a class="collapse-item" href=" {% url 'assign_delivery' %} ">Assign Delivery Man</a>
                         <a class="collapse-item" href="{% url 'category' %}">Add Brand Names</a>
                     </div>
                 </div>

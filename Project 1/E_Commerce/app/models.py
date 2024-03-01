@@ -3,8 +3,30 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
+class UserProfile(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    address = models.CharField(max_length=255)
+    village = models.CharField(max_length=100)
+    taluka = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
+    phone_number = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.user.username
+
 class User(AbstractUser):
+    USER_ROLES = (
+        ('Delivery Man', 'Delivery Man'),
+        # Add other roles as needed
+    )
     userRole = models.CharField(max_length=3, null=True)
+    phone_number = models.CharField(max_length=15)
+    address = models.CharField(max_length=255)
+    village = models.CharField(max_length=100)
+    taluka = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
 
 # Create your models here.
 class slider(models.Model):
@@ -111,6 +133,7 @@ class Order(models.Model):
     payment_id = models.CharField(max_length=100, null=True, blank=True)
     payment_status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_orders')
     
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
@@ -119,13 +142,17 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    item_total = models.DecimalField(max_digits=10, decimal_places=2)
+    item_total = models.DecimalField(max_digits=10, decimal_places=2) 
 
-# Image generation
-class Image(models.Model):
-    phrase = models.CharField(max_length=200)
-    ai_image = models.ImageField(upload_to='img/')  # Ensure this matches your MEDIA_ROOT
+class DeliveryAssignment(models.Model):
+    delivery_man = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_deliveries')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='assigned_deliveries')
+    assigned_date = models.DateField(auto_now_add=True)
+    # You can add more fields as needed, such as delivery status, delivery date, etc.
 
     def __str__(self):
-        return self.phrase
+        return f"{self.delivery_man.username} - {self.product.product_name}"
     
+class Image(models.Model):
+    name = models.CharField(max_length=100)
+    image_data = models.BinaryField()

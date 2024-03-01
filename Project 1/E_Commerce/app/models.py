@@ -6,10 +6,8 @@ from ckeditor.fields import RichTextField
 class UserProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
-    village = models.CharField(max_length=100)
-    taluka = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
-    pincode = models.CharField(max_length=10)
     phone_number = models.CharField(max_length=15)
 
     def __str__(self):
@@ -21,12 +19,6 @@ class User(AbstractUser):
         # Add other roles as needed
     )
     userRole = models.CharField(max_length=3, null=True)
-    phone_number = models.CharField(max_length=15)
-    address = models.CharField(max_length=255)
-    village = models.CharField(max_length=100)
-    taluka = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    pincode = models.CharField(max_length=10)
 
 # Create your models here.
 class slider(models.Model):

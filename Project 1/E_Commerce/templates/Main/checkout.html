@@ -57,7 +57,7 @@
             data-key="rzp_test_KE5hiRXWNUNLRk" 
             data-amount="29935" 
             data-currency="INR"
-            data-order_id="{{ paymentId }}"
+            data-order_id="{{ payment_id }}"
             data-buttontext="Pay with Razorpay"
             data-buttonclass="btn btn-sm btn-danger"
             data-name="Acme Corp"
@@ -65,7 +65,7 @@
             data-image="https://example.com/your_logo.jpg"
             data-prefill.name="Gaurav Kumar"
             data-prefill.email="gaurav.kumar@example.com"
-            data-theme.color="#07F284"
+            data-theme.color="#4E73DF"
         ></script>
         <input type="hidden" custom="Hidden Element" name="hidden"/>
         </form>
@@ -75,29 +75,6 @@
 <!-- <script>
     var handlePaymentUrl = "{% url 'handle-payment' %}";
 </script>  -->
-<!-- <script src="https://checkout.razorpay.com/v1/css/checkout.js"></script>
-<script src="{% static 'assets/js/checkout.js' %}"></script> -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{% static 'assets/js/checkout.js' %}"></script>
 {% endblock %}
-
-
-
-
-
-<!-- <div class="container">
-    <div id="order-placed-section" style="display: none;">
-        <h2>Order Placed</h2>
-        <p id="order-success-message"></p>
-    </div>
-    <h1>Checkout</h1>
-    <p>Order Summary :</p>
-    <ul>
-        {% for item in cart_items %}
-        <li>{{ item.product.name }} x {{ item.quantity }}</li>
-        {% endfor %}
-    </ul>
-    <p>Total Amount: &#8377<span id="total_item_amount">{{total_amount}}</span></p>
-
-    <button id="rzp-button1">Pay with Razorpay</button>
-</div>
-<div id="checkout-data" data-email="{{ email }}" data-fullname="{{ full_name }}">
-</div> -->

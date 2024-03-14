@@ -60,24 +60,59 @@
             
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Settings</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
+                    aria-expanded="true" aria-controls="collapseUtilities1">
+                    <span>ROLE</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities1"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
                         <a class="collapse-item" href="{% url 'adminDash' %}">View Role</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2"
+                    aria-expanded="true" aria-controls="collapseUtilities2">
+                    <span>PRODUCT</span>
+                </a>
+                <div id="collapseUtilities2" class="collapse" aria-labelledby="headingUtilities2"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header"></h6>
                         <a class="collapse-item" href="{% url 'products' %}">View Products</a>
-                        <a class="collapse-item" href="{% url 'admin_Order' %}">View Order</a>
-                        <a class="collapse-item" href="{% url 'admin_create_delivery_man' %}">Add Delivery Man</a>
-                        <a class="collapse-item" href=" {% url 'assign_delivery' %} ">Assign Delivery Man</a>
                         <a class="collapse-item" href="{% url 'category' %}">Add Brand Names</a>
                     </div>
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities3"
+                    aria-expanded="true" aria-controls="collapseUtilities3">
+                    <span>ORDER</span>
+                </a>
+                <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities3"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header"></h6>
+                        <a class="collapse-item" href="{% url 'admin_Order' %}">View Order</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities4"
+                    aria-expanded="true" aria-controls="collapseUtilities4">
+                    <span>DELIVERY</span>
+                </a>
+                <div id="collapseUtilities4" class="collapse" aria-labelledby="headingUtilities4"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header"></h6>
+                        <a class="collapse-item" href="{% url 'admin_create_delivery_man' %}">Add Delivery Man</a>
+                        <a class="collapse-item" href="{% url 'assign_delivery' %}">Assign Delivery Man</a>
+                    </div>
+                </div>
+            </li>   
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -216,6 +251,7 @@
                                 <option value="{{ delivery_man.id }}">{{ delivery_man.username }}</option>
                                 {% endfor %}
                             </select><br>
+                            <!-- Add payment_id input field -->
                             <button type="submit" class="btn btn-primary">Assign Delivery Man</button>
                         </form>
                     </div>
@@ -229,20 +265,24 @@
                             <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th>Order ID</th>
+                                        <!-- <th>Order ID</th> -->
+                                        <th>Customer</th>
+                                        <!-- <th>Village</th> -->
                                         <th>Total Amount</th>
                                         <th>Payment Status</th>
-                                        <th>Created At</th>
+                                        <!-- <th>Created At</th> -->
                                         <th>Delivery Man</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-bordered table-hover">
                                     {% for order in orders %}
                                     <tr>
-                                        <td>{{ order.id }}</td>
+                                        <!-- <td>{{ order.id }}</td> -->
+                                        <td>{{ order.user.username }}</td>
+                                        <!-- <td>{{ order.user_village}}</td> -->
                                         <td>{{ order.total_amount }}</td>
                                         <td>{% if order.payment_status %}Paid{% else %}Unpaid{% endif %}</td>
-                                        <td>{{ order.created_at }}</td>
+                                        <!-- <td>{{ order.created_at }}</td> -->
                                         <td>{% if order.delivery_man %}{{ order.delivery_man.username }}{% else %}Not Assigned{% endif %}</td>
                                     </tr>
                                     {% endfor %}

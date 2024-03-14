@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import razorpay
 import json
-
+from django.core.mail import send_mail
 
 @csrf_exempt
 def create_order(request):
@@ -42,9 +42,12 @@ def create_order(request):
                 'receipt': f'order_{order.id}',
                 'payment_capture': '1'
             }
-            orderData = client.order.create(data=payment_data)
-            order.payment_id = orderData['id']
-            order.save()
+            try:
+                orderData = client.order.create(data=payment_data)
+            except Exception as e:
+                print(f"Error creating order: {e}")
+            order.payment_id = orderData['id']  # Assign payment ID to the order instance
+            order.save()  # Save the order instance with the payment ID
 
             return JsonResponse({'order_id': orderData['id']})
         
@@ -52,9 +55,11 @@ def create_order(request):
             print(str(e))
             return JsonResponse({'error': 'An error occurred. Please try again.'}, status=500)
 
+
+
 @csrf_exempt
 def checkout(request):
-    client = razorpay.Client(auth=("rzp_test_KE5hiRXWNUNLRk", "WrlDqvBYnjEIrz67ruEptIVq"))
+    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
     print(request.user)
     payment = client.order.create({
     "amount": 50000,
@@ -63,12 +68,13 @@ def checkout(request):
     "partial_payment": False,
     "notes": {
         "key1": "value3",
-        "key2": "value2"
+        "key2": "value2",
     }
     })
+    payment_id = payment.get('id')
     cart_items = CartItem.objects.filter(cart=request.user.cart)
     total_amount = sum(item.product.price * item.quantity for item in cart_items)
-
+    print(payment_id)
     cart_count = get_cart_count(request)
     email = request.user.email
     username = request.user.username
@@ -81,8 +87,10 @@ def checkout(request):
         'email':email,
         'username': username
     }
+    
     # request.session["id"]=request.user.id
     return render(request, 'Main/checkout.html', context)
+
 
 # @csrf_exempt
 # def handle_payment(request):
@@ -119,8 +127,7 @@ def handle_payment(request):
         data = json.loads(request.body)
         razorpay_order_id = data.get('order_id')
         payment_id = data.get('payment_id')
-        csrf_token = request.META.get('HTTP_X_CSRFTOKEN')
-        print(f'CSRF Token: {csrf_token}')
+    
         try:
             order = Order.objects.get(payment_id=razorpay_order_id)
 
@@ -299,6 +306,12 @@ def REGISTER(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         userRole = request.POST.get('role')
+        phone_number2 = request.POST.get('phone_number2')
+        address2 = request.POST.get('address2')
+        villlage = request.POST.get('villlage')
+        taluka2 = request.POST.get('taluka2')
+        state2 = request.POST.get('state2')
+        pincode2 = request.POST.get('pincode2')
 
         # Validation checks for username
         if not username:
@@ -339,8 +352,6 @@ def REGISTER(request):
             messages.error(request, 'Password must contain @, numbers, and alphabets.')
             return redirect('handleregister')
 
-        # Validation checks for phone number, address, city, state, pincode (similar to other fields)
-
         # Validation checks for userRole
         if not userRole:
             messages.error(request, 'Please select a role.')
@@ -354,19 +365,44 @@ def REGISTER(request):
             messages.error(request, 'Email is already in use.')
             return redirect('handleregister')
 
+        # Validation checks for phone number
+        if not phone_number2:
+            messages.error(request, 'Phone number cannot be empty.')
+            return redirect('handleregister')
+
         # Create the User object
         user = User(
             username=username,
             email=email,
-            userRole=userRole
+            userRole=userRole,
+            address2=address2,
+            villlage=villlage, # Assuming village is the city field
+            state2=state2,
+            phone_number2=phone_number2,
+            taluka2=taluka2,
+            pincode2=pincode2
         )
         user.set_password(password)
         user.save()
 
+        # Create UserProfile object
+        user_profile = UserProfile(
+            user=user,
+            addresss=address2,
+            villagee=villlage, # Assuming village is the city field
+            statee=state2,
+            phone_numberr=phone_number2,
+            talukaa=taluka2,
+            pincodee=pincode2,
+            
+        )
+        user_profile.save()
+
         messages.success(request, 'Registration successful. You can now log in.')
         return redirect('login')
     else:
-        return render(request, 'account/register.html')
+        villages = ['Kangazha', 'Karukachal', 'Kurichy', 'Madappally', 'Nedumkunnam', 'Thottackad','Vakathanam','Vazhappally Padinjaru','Vazhoor','Vellavoor']
+        return render(request, 'account/register.html',{'villages':villages})
 
 
 def LOGIN(request):   
@@ -383,27 +419,12 @@ def LOGIN(request):
             messages.error(request, 'Email and password are invalid.')
             return redirect('login') 
     return render(request, 'account/login.html')
-#def logout(request):   
-    #return render(request, 'account/ login/')
-#def password_change(request):   
-    #return render(request, 'account/ password_change/')
-#def password_change_done(request):   
-    #return render(request, 'account/ password_change/done/')
-#def password_reset(request):   
-    #return render(request, 'account/ password_reset/')
-#def password_reset_done(request):   
-    #return render(request, 'account/ password_reset/done/')
-#def password_reset_confirm(request):   
-    #return render(request, 'account/ reset/<uidb64>/<token>/')
-#def password_reset_complete(request):   
-    #return render(request, 'account/ reset/done/')
-
 
 # View For Admin Panel
 @login_required
 @never_cache
 def admin_DashBoard_View(request):
-    # User.objects.get(id=9).delete()
+    #User.objects.get(id=21).delete()
     data = {
         "users": False
     }
@@ -422,13 +443,13 @@ def logoutUser(request):
 def profileSettings(request):
     userData = User.objects.get(id=request.user.id)
     if request.method == 'POST':
-        userData.username = request.POST['username']
-        userData.first_name = request.POST['firstname']
-        userData.last_name = request.POST['lastname']
-       # userData.place = request.POST['place']
-        userData.email = request.POST['email']
-       # userData.email = request.POST['']
-       # userData.save()
+        userData.username = request.POST.get('username')
+        userData.first_name = request.POST.get('firstname')
+        userData.last_name = request.POST.get('lastname')
+        userData.email = request.POST.get('email')
+        userData.save()
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('profileSettings')
     data = {
         "user": userData
     }
@@ -555,50 +576,53 @@ from django.db import transaction
 
 @csrf_exempt
 def order(request):
-    # Assuming user is authenticated
-    userId = request.GET['id']
-    user = User.objects.get(id=userId)
-    login(request, user)
-    user = request.user
-    cart = user.cart
-    cart_items = CartItem.objects.filter(cart=cart)
+    if request.method == 'POST':
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
+        # Assuming user is authenticated
+        userId = request.GET['id']
+        user = User.objects.get(id=userId)
+        login(request, user)
+        user = request.user
+        cart = user.cart
+        cart_items = CartItem.objects.filter(cart=cart)
+        
+        # Calculate total amount
+        total_amount = sum(item.product.price * item.quantity for item in cart_items)
+        
+        # Create the order instance
+        order = Order.objects.create(
+            user=user,
+            total_amount=total_amount,
+            payment_id=razorpay_payment_id,
+            payment_status=1
+        )
 
-    # Calculate total amount
-    total_amount = sum(item.product.price * item.quantity for item in cart_items)
+        # Create order items and associate them with the order
+        with transaction.atomic():
+            for cart_item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.product,
+                    quantity=cart_item.quantity,
+                    item_total=cart_item.product.price * cart_item.quantity
+                )
+        # OrderItem.objects.all().delete()
+        #Order.objects.all().delete()      
+        # Convert cart_items to a list before deleting
+        cart_items_list = list(cart_items)
 
-    # Create the order instance
-    order = Order.objects.create(
-        user=user,
-        total_amount=total_amount
-    )
+        # Clear the user's cart after order creation
+        cart_items.delete()
 
-    # Create order items and associate them with the order
-    with transaction.atomic():
-        for cart_item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                product=cart_item.product,
-                quantity=cart_item.quantity,
-                item_total=cart_item.product.price * cart_item.quantity
-            )
-            print(cart_item.product)
-            print(cart_item.quantity)
+        # Pass necessary data to the template
+        data = {
+            'user': user,
+            'cart_items': cart_items_list,  # Pass the list instead of queryset
+            'total_amount': total_amount,
+        }
 
-    # Convert cart_items to a list before deleting
-    cart_items_list = list(cart_items)
-
-    # Clear the user's cart after order creation
-    cart_items.delete()
-
-    # Pass necessary data to the template
-    data = {
-        'user': user,
-        'cart_items': cart_items_list,  # Pass the list instead of queryset
-        'total_amount': total_amount,
-    }
-
-    # Render the template with the provided data
-    return render(request, 'Main/order.html', data)
+        # Render the template with the provided data
+        return render(request, 'Main/order.html', data)
 
 
 
@@ -675,7 +699,7 @@ def bill_invoice(request):
     # Assuming you want to fetch the latest order
     order = orders.latest('created_at') if orders.exists() else None
     # print(order.total_amount)
-    return render(request, 'Main/bill_invoice.html', {'order': order})
+    return render(request, 'Main/home.html', {'order': order})
 
 # views.py or other files
 
@@ -684,10 +708,12 @@ def admin_create_delivery_man(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        address = request.POST.get('address')
-        city = request.POST.get('city')
-        state = request.POST.get('state')
-        phone_number = request.POST.get('phone_number')
+        addresss = request.POST.get('addresss')
+        talukaa = request.POST.get('talukaa')
+        statee = request.POST.get('statee')
+        phone_numberr = request.POST.get('phone_numberr')
+        villagee = request.POST.get('villagee')
+        pincodee = request.POST.get('pincodee')
         
         try:
             # Check if the username already exists
@@ -703,40 +729,57 @@ def admin_create_delivery_man(request):
             user.save()
             
             # Create the user profile with address, city, state, and phone number
-            UserProfile.objects.create(user=user, address=address, city=city, state=state, phone_number=phone_number)
-            
+            UserProfile.objects.create(user=user, addresss=addresss, talukaa=talukaa, statee=statee, phone_numberr=phone_numberr, villagee=villagee, pincodee=pincodee)
+            # Send confirmation email
+            subject = 'Account Creation Confirmation'
+            message = f'Hello {username},\n\nYour account as a delivery man has been created successfully.\nYour password : {username}@23'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            to_email = email
+            send_mail(subject, message, from_email, [to_email])
+
             messages.success(request, f'Delivery man {username} has been created successfully.')
             return redirect('adminDash')  # Redirect to admin dashboard or any other appropriate page
-        
+            
         except IntegrityError:
             messages.error(request, 'An error occurred while creating the user.')
+            
             return redirect('admin_create_delivery_man')
     
     return render(request, 'Main/admin_create_delivery_man.html')
 
+from django.db.models import Q
+
 def assign_delivery(request):
-    # Assuming you have a form submission to assign delivery men to orders
     if request.method == 'POST':
         order_id = request.POST.get('order_id')
         delivery_man_id = request.POST.get('delivery_man_id')
-
+        payment_id = request.POST.get('razorpay_payment_id')
         try:
             order = Order.objects.get(id=order_id)
-            delivery_man = User.objects.get(id=delivery_man_id)
-            order.delivery_man = delivery_man
-            order.save()
-            return redirect('assign_delivery')  # Redirect to the same page after assigning
+            # Check if payment is successful before assigning delivery man
+            if payment_id and order.payment_status:
+                order.payment_id = payment_id
+                order.payment_status = True  # Set payment status to True
+                order.save()
+                return redirect('assign_delivery')
         except Order.DoesNotExist:
-            # Handle the case where the order does not exist
             pass
 
-    # Retrieve orders without a delivery man assigned
-    orders = Order.objects.all()
-    # Retrieve all delivery men (users with the appropriate role, e.g., 'Delivery Man')
+    orders_without_delivery_man = Order.objects.filter(delivery_man=None)  # Only orders without a delivery man assigned
     delivery_men = User.objects.filter(userRole='Delivery Man')
 
-    # Pass the orders without a delivery man and the delivery men to the template
-    return render(request, 'Main/assign_delivery.html', {'orders': orders, 'delivery_men': delivery_men})
+    for order in orders_without_delivery_man:
+        user_profile = UserProfile.objects.get(user=order.user)  # Retrieve UserProfile associated with the user
+        user_village = user_profile.villagee  # Access village from UserProfile
+        eligible_delivery_men = delivery_men.filter(Q(villlage=user_village) | Q(villlage__isnull=True))
+        if eligible_delivery_men.exists():
+            order_eligible = eligible_delivery_men.first()
+            order.delivery_man = order_eligible
+            order.save()
+            break  # Assign the first eligible delivery man and break the loop
+
+    return render(request, 'Main/assign_delivery.html', {'orders': orders_without_delivery_man, 'delivery_men': delivery_men})
+
 
 def admin_Order(request):
     orders = Order.objects.all()  
@@ -764,5 +807,4 @@ def view_image(request, image_id):
     image = Image.objects.get(pk=image_id)
     response = HttpResponse(image.image_data, content_type='image/png')  # Adjust content type based on your image format
     return response
-
 

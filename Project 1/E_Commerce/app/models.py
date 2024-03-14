@@ -5,10 +5,13 @@ from ckeditor.fields import RichTextField
 
 class UserProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
-    address = models.CharField(max_length=255)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
+    addresss = models.CharField(max_length=255)
+    talukaa = models.CharField(max_length=100)
+    statee = models.CharField(max_length=100)
+    phone_numberr = models.CharField(max_length=15)
+    villagee = models.CharField(max_length=100)
+    pincodee = models.CharField(max_length=10)
+    
 
     def __str__(self):
         return self.user.username
@@ -19,8 +22,28 @@ class User(AbstractUser):
         # Add other roles as needed
     )
     userRole = models.CharField(max_length=3, null=True)
-
+    phone_number2 = models.CharField(max_length=15, null=True)
+    address2 = models.CharField(max_length=255, null=True)
+    VILLAGE_CHOICES = (
+    ('Kangazha', 'Kangazha'),
+    ('Karukachal', 'Karukachal'),
+    ('Kurichy','Kurichy'),
+    ('Madappally','Madappally'),
+    ('Nedumkunnam','Nedumkunnam'),
+    ('Thottackad','Thottackad'),
+    ('Vakathanam','Vakathanam'),
+    ('Vazhappally Padinjaru','Vazhappally Padinjaru'),
+    ('Vazhoor','Vazhoor'),
+    ('Vellavoor','Vellavoor'),
+    # Add more choices as needed
+    )
+    villlage = models.CharField(max_length=100, choices=VILLAGE_CHOICES, null=True)
+    taluka2 = models.CharField(max_length=100, null=True)
+    state2 = models.CharField(max_length=100, null=True)
+    pincode2 = models.CharField(max_length=10, null=True)
+    
 # Create your models here.
+    
 class slider(models.Model):
     DISCOUNT_DEAL = (
         ('HOT DEALS','HOT DEALS'),
@@ -123,7 +146,7 @@ class Order(models.Model):
     products = models.ManyToManyField(Product, through='OrderItem')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_id = models.CharField(max_length=100, null=True, blank=True)
-    payment_status = models.BooleanField(default=False)
+    payment_status = models.BooleanField(default=False)  # Add payment status field
     created_at = models.DateTimeField(auto_now_add=True)
     delivery_man = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_orders')
     
@@ -144,7 +167,23 @@ class DeliveryAssignment(models.Model):
 
     def __str__(self):
         return f"{self.delivery_man.username} - {self.product.product_name}"
+
+# class Village(models.Model):
+#     name = models.CharField(max_length=100)
+#     # Add any other fields you need for the Village model
     
+#     def __str__(self):
+#         return self.name
+
+# class DeliveryMan(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     village = models.ForeignKey(Village, on_delete=models.CASCADE)
+#     # Add any other fields you need for the DeliveryMan model
+    
+#     def __str__(self):
+#         return self.user.username
+
+
 class Image(models.Model):
     name = models.CharField(max_length=100)
     image_data = models.BinaryField()

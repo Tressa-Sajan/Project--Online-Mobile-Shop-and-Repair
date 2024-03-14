@@ -33,22 +33,36 @@
                     <h3 style="color: white;">REGISTER</h3>
                     <form action="{% url 'handleregister' %}" method="post">
                         {% csrf_token %}
-                        <label for="username" style="color: white;">Username<span>*</span></label>
-                        <input id="username" type="text" placeholder="Enter Username" name="username">
-                        <label for="email-id" style="color: white;">Email Address <span>*</span></label>
-                        <input id="email-id" type="text" placeholder="Email address..." name="email">
-                        <label for="userpass" style="color: white;">Password<span>*</span></label>
-                        <input id="userpass" type="password" placeholder="Enter password..." name="password">
-                        <!-- <label for="phone" style="color: white;">Phone Number<span>*</span></label>
-                        <input id="phone" type="text" placeholder="Enter phone number..." name="phone">
-                        <label for="address" style="color: white;">Address<span>*</span></label>
-                        <input id="address" type="text" placeholder="Enter address..." name="address">
-                        <label for="city" style="color: white;">City<span>*</span></label>
-                        <input id="city" type="text" placeholder="Enter city..." name="city">
-                        <label for="state" style="color: white;">State<span>*</span></label>
-                        <input id="state" type="text" placeholder="Enter state..." name="state">
-                        <label for="pincode" style="color: white;">Pincode<span>*</span></label>
-                        <input id="pincode" type="text" placeholder="Enter pincode..." name="pincode"> -->
+                        <label for="username" style="color: white;">Name:</label><br>
+                        <input type="text" id="username" name="username" required><br>
+
+                        <label for="email" style="color: white;">Email:</label><br>
+                        <input type="email" id="email" name="email" required><br>
+
+                        <label for="password" style="color: white;">Password:</label><br>
+                        <input type="password" id="password" name="password" required><br>
+
+                        <label for="address2" style="color: white;">Address:</label><br>
+                        <input type="text" id="address2" name="address2" required><br>
+
+                        <label for="taluka2" style="color: white;">Taluka:</label><br>
+                        <input type="text" id="taluka2" name="taluka2" required><br>
+
+                        <label for="state2" style="color: white;">State:</label><br>
+                        <input type="text" id="state2" name="state2" required><br>
+
+                        <label for="phone_number2" style="color: white;">Phone Number:</label><br>
+                        <input type="text" id="phone_number2" name="phone_number2" required><br>
+
+                        <label for="villlage" style="color: white;">Village:</label><br>
+                        <select name="villlage">
+                            {% for villlage in villages %}
+                            <br><option value="{{ villlage }}">{{ villlage }}</option>
+                            {% endfor %}
+                        </select><br><br>
+                        <label for="pincode2" style="color: white;">Pincode:</label><br>
+                        <input type="text" id="pincode2" name="pincode2" required><br>
+                        
                         <label for="role" style="color: white;">Select the role<span>*</span></label><br>
                         <select id="role" name="role" style="width: 100vw;"> 
                             <option value="">Select the role</option>
@@ -60,6 +74,49 @@
                         <br>
                         <button type="submit" class="tp-in-btn w-100">Register<button></button><br><br>
                     </form>
+
+                        <!-- <label for="username" style="color: white;">Username<span>*</span></label>
+                        <input id="username" type="text" placeholder="Enter Username" name="username">
+
+                        <label for="email-id" style="color: white;">Email Address <span>*</span></label>
+                        <input id="email-id" type="text" placeholder="Email address..." name="email">
+
+                        <label for="userpass" style="color: white;">Password<span>*</span></label>
+                        <input id="userpass" type="password" placeholder="Enter password..." name="password">
+
+                        <label for="phone_number" style="color: white;">Phone Number<span>*</span></label>
+                        <input type="text" name="phone_number" placeholder="Phone Number">
+                        
+                        <label for="address" style="color: white;">Address<span>*</span></label>
+                        <input type="text" name="address" placeholder="Address">
+
+                        <label for="taluka" style="color: white;">Taluka<span>*</span></label>
+                        <input type="text" name="taluka" placeholder="Taluka">
+
+                        <label for="village" style="color: white;">Village<span>*</span></label><br>
+                        <select name="village">
+                            {% for village in villages %}
+                            <br><option value="{{ village }}">{{ village }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <br><br><label for="state" style="color: white;">State<span>*</span></label>
+                        <input type="text" name="state" placeholder="State">
+
+                        <label for="pincode" style="color: white;">Pincode<span>*</span></label>
+                        <input type="text" name="pincode" placeholder="Pincode">
+
+                        <label for="role" style="color: white;">Select the role<span>*</span></label><br>
+                        <select id="role" name="role" style="width: 100vw;"> 
+                            <option value="">Select the role</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Seller">Seller</option>
+                        </select><br><br>
+                        <div class="login-action mb-10 fix">
+                        </div>
+                        <br>
+                        <button type="submit" class="tp-in-btn w-100">Register<button></button><br><br>
+                    </form> -->
                 </div>
             </div>
         </div>

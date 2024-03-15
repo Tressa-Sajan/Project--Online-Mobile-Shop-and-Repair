@@ -1,0 +1,3 @@
+[console_scripts]
+neural-style = neural_style.neural_style:main
+

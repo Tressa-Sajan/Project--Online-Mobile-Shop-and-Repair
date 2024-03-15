@@ -771,7 +771,7 @@ def assign_delivery(request):
     for order in orders_without_delivery_man:
         user_profile = UserProfile.objects.get(user=order.user)  # Retrieve UserProfile associated with the user
         user_village = user_profile.villagee  # Access village from UserProfile
-        eligible_delivery_men = delivery_men.filter(Q(villlage=user_village) | Q(villlage__isnull=True))
+        eligible_delivery_men = delivery_men.filter(Q(villagee=user_village) | Q(villagee__isnull=True))
         if eligible_delivery_men.exists():
             order_eligible = eligible_delivery_men.first()
             order.delivery_man = order_eligible
@@ -779,6 +779,9 @@ def assign_delivery(request):
             break  # Assign the first eligible delivery man and break the loop
 
     return render(request, 'Main/assign_delivery.html', {'orders': orders_without_delivery_man, 'delivery_men': delivery_men})
+
+
+
 
 
 def admin_Order(request):

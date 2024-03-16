@@ -251,7 +251,7 @@
                                 <option value="{{ delivery_man.id }}">{{ delivery_man.username }}</option>
                                 {% endfor %}
                             </select><br>
-                            <!-- Add payment_id input field -->
+                            <input type="hidden" name="razorpay_payment_id" value="{{ order.payment_id }}">
                             <button type="submit" class="btn btn-primary">Assign Delivery Man</button>
                         </form>
                     </div>

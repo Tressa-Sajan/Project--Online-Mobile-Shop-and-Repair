@@ -754,31 +754,40 @@ def assign_delivery(request):
         order_id = request.POST.get('order_id')
         delivery_man_id = request.POST.get('delivery_man_id')
         payment_id = request.POST.get('razorpay_payment_id')
+        
         try:
             order = Order.objects.get(id=order_id)
-            # Check if payment is successful before assigning delivery man
-            if payment_id and order.payment_status:
+            if payment_id and not order.payment_status:
                 order.payment_id = payment_id
                 order.payment_status = True  # Set payment status to True
                 order.save()
+            # Assign delivery man
+            if delivery_man_id:
+                delivery_man = User.objects.get(id=delivery_man_id)
+                order.delivery_man = delivery_man
+                order.save()
+              print(f"Delivery man {delivery_man.username} assigned to order {order.id}.")
                 return redirect('assign_delivery')
         except Order.DoesNotExist:
-            pass
+            print("Order does not exist.")
+        except User.DoesNotExist:
+            print("Delivery man does not exist.")
 
-    orders_without_delivery_man = Order.objects.filter(delivery_man=None)  # Only orders without a delivery man assigned
-    delivery_men = User.objects.filter(userRole='Delivery Man')
+        orders_without_delivery_man = Order.objects.filter(delivery_man=None)  # Only orders without a delivery man assigned
+        delivery_men = User.objects.filter(userRole='Delivery Man')
 
-    for order in orders_without_delivery_man:
-        user_profile = UserProfile.objects.get(user=order.user)  # Retrieve UserProfile associated with the user
-        user_village = user_profile.villagee  # Access village from UserProfile
-        eligible_delivery_men = delivery_men.filter(Q(villagee=user_village) | Q(villagee__isnull=True))
-        if eligible_delivery_men.exists():
-            order_eligible = eligible_delivery_men.first()
-            order.delivery_man = order_eligible
-            order.save()
-            break  # Assign the first eligible delivery man and break the loop
+        for order in orders_without_delivery_man:
+            user_profile = order.user.userprofile  # Retrieve UserProfile associated with the user
+            user_village = user_profile.villagee  # Access village from UserProfile
+            eligible_delivery_men = delivery_men.filter(villlage=user_village)
+            if eligible_delivery_men.exists():
+                order_eligible = eligible_delivery_men.first()
+                order.delivery_man = order_eligible
+                order.save()
+                break  # Assign the first eligible delivery man and break the loop
 
-    return render(request, 'Main/assign_delivery.html', {'orders': orders_without_delivery_man, 'delivery_men': delivery_men})
+        return render(request, 'Main/assign_delivery.html', {'orders': orders_without_delivery_man, 'delivery_men': delivery_men})
+
 
 
 

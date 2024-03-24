@@ -70,6 +70,7 @@ urlpatterns = [
     path('upload_image/',views.upload_image, name='upload_image'),
     path('upload/success/<int:image_id>/', views.upload_success, name='upload_success'),  # Add the URL pattern for upload_success
     path('image/<int:image_id>/', views.view_image, name='view_image'),
+    
 # end il ith add cheyyanam
 
 

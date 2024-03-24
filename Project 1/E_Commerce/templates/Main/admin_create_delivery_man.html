@@ -24,10 +24,9 @@
 
     <!-- Custom styles for this page -->
     <link href="{% static 'admin/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-
+    <script src="{% static 'admin/js/popup_message.js' %}"></script>
 </head>
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
     
@@ -246,7 +245,25 @@
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
-
+        <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 10000"></div>
+        <!-- <script>
+            // Function to display messages
+            {% if messages %}
+                {% for message in messages %}
+                    displayPopupMessage("{{ message }}", "{{ message.tags }}");
+                {% endfor %}
+            {% endif %}
+        </script> -->
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800"></h1>
         <p class="mb-4"><a target="_blank" href=""></a></p>
@@ -267,8 +284,8 @@
                 <label for="addresss">Address:</label><br>
                 <input type="text" id="addresss" name="addresss" required><br>
 
-                <label for="talukaa">Taluka:</label><br>
-                <input type="text" id="talukaa" name="talukaa" required><br>
+                <label for="districtt">District:</label><br>
+                <input type="text" id="districtt" name="districtt" required><br>
 
                 <label for="statee">State:</label><br>
                 <input type="text" id="statee" name="statee" required><br>
@@ -276,22 +293,23 @@
                 <label for="phone_numberr">Phone Number:</label><br>
                 <input type="text" id="phone_numberr" name="phone_numberr" required><br>
 
-                <label for="villagee">Village:</label><br>
-                <select id="villagee" name="villagee" required>
-                    <option value="Kangazha">Kangazha</option>
-                    <option value="Karukachal">Karukachal</option>
-                    <option value="Kurichy">Kurichy</option>
-                    <option value="Nedumkunnam">Nedumkunnam</option>
-                    <option value="Thottackad">Thottackad</option>
-                    <option value="Vakathanam">Vakathanam</option>
-                    <option value="Vazhappally Padinjaru">Vazhappally Padinjaru</option>
-                    <option value="Vazhoor">Vazhoor</option>
-                    <option value="Vellavoor">Vellavoor</option>                    <!-- Add more options as needed -->
+                <label for="townn">Village:</label><br>
+                <select id="townn" name="townn" required>
+                    <option value="Athirampuzha">Athirampuzha</option>
+                    <option value="Chengalam">Chengalam</option>
+                    <option value="Erattupetta">Erattupetta</option>
+                    <option value="Ettumanoor">Ettumanoor</option>
+                    <option value="Kottayam">Kottayam</option>
+                    <option value="Nattakam">Nattakam</option>
+                    <option value="Paippad">Paippad</option>
+                    <option value="Palai">Vazhoor</option>
+                    <option value="Puthuppally">Puthuppally</option>   
+                    <option value="Vellavoor">Vellavoor</option>                  <!-- Add more options as needed -->
                 </select><br>
 
                 <label for="pincodee">Pincode:</label><br>
                 <input type="text" id="pincodee" name="pincodee" required><br><br>
-                <button type="submit">Create Delivery Man</button>
+                <button type="submit" class="btn btn-primary">Create Delivery Man</button>
             </form>
             
             

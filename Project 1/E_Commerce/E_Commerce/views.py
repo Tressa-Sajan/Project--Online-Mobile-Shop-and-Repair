@@ -308,8 +308,8 @@ def REGISTER(request):
         userRole = request.POST.get('role')
         phone_number2 = request.POST.get('phone_number2')
         address2 = request.POST.get('address2')
-        villlage = request.POST.get('villlage')
-        taluka2 = request.POST.get('taluka2')
+        town2 = request.POST.get('town2')
+        district2 = request.POST.get('district2')
         state2 = request.POST.get('state2')
         pincode2 = request.POST.get('pincode2')
 
@@ -376,10 +376,10 @@ def REGISTER(request):
             email=email,
             userRole=userRole,
             address2=address2,
-            villlage=villlage, # Assuming village is the city field
+            town2=town2, # Assuming village is the city field
             state2=state2,
             phone_number2=phone_number2,
-            taluka2=taluka2,
+            district2=district2,
             pincode2=pincode2
         )
         user.set_password(password)
@@ -389,10 +389,10 @@ def REGISTER(request):
         user_profile = UserProfile(
             user=user,
             addresss=address2,
-            villagee=villlage, # Assuming village is the city field
+            townn=town2, # Assuming village is the city field
             statee=state2,
             phone_numberr=phone_number2,
-            talukaa=taluka2,
+            districtt=district2,
             pincodee=pincode2,
             
         )
@@ -401,8 +401,8 @@ def REGISTER(request):
         messages.success(request, 'Registration successful. You can now log in.')
         return redirect('login')
     else:
-        villages = ['Kangazha', 'Karukachal', 'Kurichy', 'Madappally', 'Nedumkunnam', 'Thottackad','Vakathanam','Vazhappally Padinjaru','Vazhoor','Vellavoor']
-        return render(request, 'account/register.html',{'villages':villages})
+        towns = ['Athirampuzha', 'Chengalam', 'Erattupetta', 'Ettumanoor', 'Kottayam', 'Nattakam','Paippad','Palai','Puthuppally','Vellavoor']
+        return render(request, 'account/register.html',{'towns':towns})
 
 
 def LOGIN(request):   
@@ -424,13 +424,13 @@ def LOGIN(request):
 @login_required
 @never_cache
 def admin_DashBoard_View(request):
-    #User.objects.get(id=21).delete()
+   # User.objects.get(id=13).delete()
     data = {
         "users": False
     }
-    
-    users = User.objects.exclude(is_superuser=True)
+    users = User.objects.exclude(is_superuser=True).prefetch_related('userprofile')
     data['users'] = users
+    
     return render(request, 'Main/admin_dashboard.html', data)
 
 
@@ -512,6 +512,7 @@ def deactivate(request):
     user=User.objects.get(id=uid)
     user.is_active = False
     user.save()
+    messages.success(request, 'Successfully deactivated.')
     return redirect ('adminDash')
 
 def activate(request):
@@ -519,6 +520,7 @@ def activate(request):
     user=User.objects.get(id=uid)
     user.is_active=True
     user.save()
+    messages.success(request, 'Successfully activated.')
     return redirect('adminDash')
 
 def productView(request):
@@ -536,7 +538,8 @@ def category(request):
         cat = Category(name=categoryName)  # Create a new Category instance
         cat.save()  # Save the new category to the database
         return redirect('category')
-    
+    # Category.objects.filter(id=6).delete()
+    # messages.success(request, f'{} updated successfully.')
     # Fetch all categories from the database
     categories = Category.objects.all()
     
@@ -573,7 +576,6 @@ def buy(request):
 #     # return HttpResponse("An error occurred")
 
 from django.db import transaction
-
 @csrf_exempt
 def order(request):
     if request.method == 'POST':
@@ -586,10 +588,8 @@ def order(request):
         cart = user.cart
         cart_items = CartItem.objects.filter(cart=cart)
         
-        # Calculate total amount
         total_amount = sum(item.product.price * item.quantity for item in cart_items)
         
-        # Create the order instance
         order = Order.objects.create(
             user=user,
             total_amount=total_amount,
@@ -597,7 +597,6 @@ def order(request):
             payment_status=1
         )
 
-        # Create order items and associate them with the order
         with transaction.atomic():
             for cart_item in cart_items:
                 OrderItem.objects.create(
@@ -607,30 +606,25 @@ def order(request):
                     item_total=cart_item.product.price * cart_item.quantity
                 )
         # OrderItem.objects.all().delete()
+        # Order.objects.filter(id=12).delete()
         #Order.objects.all().delete()      
         # Convert cart_items to a list before deleting
         cart_items_list = list(cart_items)
-
-        # Clear the user's cart after order creation
         cart_items.delete()
-
-        # Pass necessary data to the template
         data = {
             'user': user,
             'cart_items': cart_items_list,  # Pass the list instead of queryset
             'total_amount': total_amount,
         }
-
-        # Render the template with the provided data
         return render(request, 'Main/order.html', data)
 
 
 
 def productViewC(request):
-    if request.user.product_set.exists():
-        products = request.user.product_set.all()
-        return render(request, 'Main/productViewC.html', {'products': products})
-    else:
+    # if request.user.product_set.exists():
+        # products = request.user.product_set.all()
+    #     return render(request, 'Main/productViewC.html', {'products': products})
+    # else:
         return render(request, 'Main/productViewC.html', {'products': None})
 
 def edit_product(request, product_id):
@@ -699,7 +693,7 @@ def bill_invoice(request):
     # Assuming you want to fetch the latest order
     order = orders.latest('created_at') if orders.exists() else None
     # print(order.total_amount)
-    return render(request, 'Main/home.html', {'order': order})
+    return render(request, 'Main/bill_invoice.html', {'order': order})
 
 # views.py or other files
 
@@ -709,10 +703,10 @@ def admin_create_delivery_man(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         addresss = request.POST.get('addresss')
-        talukaa = request.POST.get('talukaa')
+        districtt = request.POST.get('districtt')
         statee = request.POST.get('statee')
         phone_numberr = request.POST.get('phone_numberr')
-        villagee = request.POST.get('villagee')
+        townn = request.POST.get('townn')
         pincodee = request.POST.get('pincodee')
         
         try:
@@ -729,70 +723,69 @@ def admin_create_delivery_man(request):
             user.save()
             
             # Create the user profile with address, city, state, and phone number
-            UserProfile.objects.create(user=user, addresss=addresss, talukaa=talukaa, statee=statee, phone_numberr=phone_numberr, villagee=villagee, pincodee=pincodee)
+            UserProfile.objects.create(user=user, addresss=addresss, districtt=districtt, statee=statee, phone_numberr=phone_numberr, townn=townn, pincodee=pincodee)
             # Send confirmation email
             subject = 'Account Creation Confirmation'
             message = f'Hello {username},\n\nYour account as a delivery man has been created successfully.\nYour password : {username}@23'
             from_email = settings.DEFAULT_FROM_EMAIL
             to_email = email
             send_mail(subject, message, from_email, [to_email])
-
-            messages.success(request, f'Delivery man {username} has been created successfully.')
-            return redirect('adminDash')  # Redirect to admin dashboard or any other appropriate page
+            print("Success message sented!!")
+            messages.success(request, f'A email has been sent to {username} and an delivery man account has been created successfully.')
+            return redirect('admin_create_delivery_man')  # Redirect to admin dashboard or any other appropriate page
             
         except IntegrityError:
             messages.error(request, 'An error occurred while creating the user.')
-            
             return redirect('admin_create_delivery_man')
     
     return render(request, 'Main/admin_create_delivery_man.html')
 
-from django.db.models import Q
-
 def assign_delivery(request):
+    # Retrieve all orders that need to be assigned a delivery man
+    orders = Order.objects.filter(delivery_man__isnull=True)
+
+    # Retrieve all delivery men who have the role 'Delivery Man'
+    delivery_men = User.objects.filter(userRole='Delivery Man')
+
     if request.method == 'POST':
         order_id = request.POST.get('order_id')
         delivery_man_id = request.POST.get('delivery_man_id')
-        payment_id = request.POST.get('razorpay_payment_id')
-        
+
         try:
             order = Order.objects.get(id=order_id)
-            if payment_id and not order.payment_status:
-                order.payment_id = payment_id
-                order.payment_status = True  # Set payment status to True
-                order.save()
-            # Assign delivery man
-            if delivery_man_id:
-                delivery_man = User.objects.get(id=delivery_man_id)
+            delivery_man = User.objects.get(id=delivery_man_id)
+
+            # Retrieve user's town2 and delivery man's townn
+            user_town = order.user.town2
+            delivery_man_town = delivery_man.userprofile.townn
+
+            # Check if the delivery man serves the user's town
+            if user_town == delivery_man_town:
+                # Assign the delivery man to the order
                 order.delivery_man = delivery_man
                 order.save()
-              print(f"Delivery man {delivery_man.username} assigned to order {order.id}.")
-                return redirect('assign_delivery')
+
+                # Redirect to the admin order page after successful assignment
+                return redirect('admin_Order')  
+
+            else:
+                # If the delivery man does not serve the user's town, display an error message
+                error_message = "Selected delivery man does not serve the user's town."
+                return render(request, 'Main/assign_delivery.html', {'orders': orders, 'delivery_men': delivery_men, 'error_message': error_message})
+
         except Order.DoesNotExist:
-            print("Order does not exist.")
+            # Handle the case where the order with the given ID does not exist
+            error_message = "Order does not exist."
+            return render(request, 'Main/assign_delivery.html', {'orders': orders, 'delivery_men': delivery_men, 'error_message': error_message})
+
         except User.DoesNotExist:
-            print("Delivery man does not exist.")
+            # Handle the case where the delivery man with the given ID does not exist
+            error_message = "Delivery man does not exist."
+            return render(request, 'Main/assign_delivery.html', {'orders': orders, 'delivery_men': delivery_men, 'error_message': error_message})
 
-        orders_without_delivery_man = Order.objects.filter(delivery_man=None)  # Only orders without a delivery man assigned
-        delivery_men = User.objects.filter(userRole='Delivery Man')
-
-        for order in orders_without_delivery_man:
-            user_profile = order.user.userprofile  # Retrieve UserProfile associated with the user
-            user_village = user_profile.villagee  # Access village from UserProfile
-            eligible_delivery_men = delivery_men.filter(villlage=user_village)
-            if eligible_delivery_men.exists():
-                order_eligible = eligible_delivery_men.first()
-                order.delivery_man = order_eligible
-                order.save()
-                break  # Assign the first eligible delivery man and break the loop
-
-        return render(request, 'Main/assign_delivery.html', {'orders': orders_without_delivery_man, 'delivery_men': delivery_men})
-
-
-
-
-
-
+    else:
+        # Render the assign delivery template with orders and delivery men
+        return render(request, 'Main/assign_delivery.html', {'orders': orders, 'delivery_men': delivery_men})
 def admin_Order(request):
     orders = Order.objects.all()  
     return render(request, 'Main/admin_Order.html', {'orders': orders})
@@ -819,4 +812,3 @@ def view_image(request, image_id):
     image = Image.objects.get(pk=image_id)
     response = HttpResponse(image.image_data, content_type='image/png')  # Adjust content type based on your image format
     return response
-

@@ -233,7 +233,17 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 10000"></div>
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800"></h1>
                     <p class="mb-4"><a target="_blank"

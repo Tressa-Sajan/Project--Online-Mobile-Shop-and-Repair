@@ -28,7 +28,7 @@
             }
         
             .product-card img {
-                height: 500px;
+                height: 440px;
                 object-fit: cover;
                 border-bottom: 1px solid #eee;
             }
@@ -88,7 +88,9 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ p.product_name }}</h5>
                             <p class="card-text">{{ p.model_Name }}</p>
+                            <strong><h6 class="card-text">₹{{ p.price }}</h6></strong><br>
                             <a href="{% url 'increase-cart-item' product_id=p.id %}" class="btn btn-info btn-md">Add to Cart <i class="flaticon-shopping-bag"></i></a>
+                            <a href="#" class="btn btn">View</a>
                         </div>
                     </div>
                 </div>

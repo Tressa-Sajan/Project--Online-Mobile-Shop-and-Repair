@@ -158,13 +158,13 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
+                        <!-- <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                            <!-- <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                 aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
@@ -179,7 +179,7 @@
                                     </div>
                                 </form>
                             </div>
-                        </li>
+                        </li> --> 
 
                         <!-- Nav Item - Alerts -->
                         <!-- <li class="nav-item dropdown no-arrow mx-1">
@@ -244,7 +244,17 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 10000"></div>
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800"></h1>
                     <p class="mb-4"><a target="_blank" href=""></a></p>
@@ -258,21 +268,21 @@
                                         <table class="table table-bordered table-hover" id="dataTable">
                                             <thead class="table-dark">
                                                 <tr>
-                                                    <th>Order ID</th>
+                                                    <!-- <th>Order ID</th> -->
                                                     <th>User</th>
                                                     <th>Total Amount</th>
                                                     <th>Payment Status</th>
-                                                    <th>Created At</th>
+                                                    <th>Delivery Man</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for order_item in orders %}
                                                 <tr>
-                                                    <td>{{ order_item.id }}</td>
+                                                    <!-- <td>{{ order_item.id }}</td> -->
                                                     <td>{{ order_item.user.username }}</td>  <!-- Access directly from order_item -->
                                                     <td>{{ order_item.total_amount }}</td>  <!-- Access directly from order_item -->
                                                     <td>{% if order_item.payment_status %} Paid {% else %} Unpaid {% endif %}</td>
-                                                    <td>{{ order_item.created_at }}</td>
+                                                    <td>{{ order_item.delivery_man }}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

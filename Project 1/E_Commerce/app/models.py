@@ -5,13 +5,13 @@ from ckeditor.fields import RichTextField
 
 class UserProfile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
+    # username = models.CharField(max_length=150)
     addresss = models.CharField(max_length=255)
-    talukaa = models.CharField(max_length=100)
+    districtt = models.CharField(max_length=100)
     statee = models.CharField(max_length=100)
     phone_numberr = models.CharField(max_length=15)
-    villagee = models.CharField(max_length=100)
+    townn = models.CharField(max_length=100)
     pincodee = models.CharField(max_length=10)
-    
 
     def __str__(self):
         return self.user.username
@@ -19,26 +19,25 @@ class UserProfile(models.Model):
 class User(AbstractUser):
     USER_ROLES = (
         ('Delivery Man', 'Delivery Man'),
-        # Add other roles as needed
     )
     userRole = models.CharField(max_length=3, null=True)
     phone_number2 = models.CharField(max_length=15, null=True)
     address2 = models.CharField(max_length=255, null=True)
-    VILLAGE_CHOICES = (
-    ('Kangazha', 'Kangazha'),
-    ('Karukachal', 'Karukachal'),
-    ('Kurichy','Kurichy'),
-    ('Madappally','Madappally'),
-    ('Nedumkunnam','Nedumkunnam'),
-    ('Thottackad','Thottackad'),
-    ('Vakathanam','Vakathanam'),
-    ('Vazhappally Padinjaru','Vazhappally Padinjaru'),
-    ('Vazhoor','Vazhoor'),
+    TOWN_CHOICES = (
+    ('Athirampuzha', 'Athirampuzha'),
+    ('Chengalam', 'Chengalam'),
+    ('Erattupetta','Erattupetta'),
+    ('Ettumanoor','Ettumanoor'),
+    ('Kottayam','Kottayam'),
+    ('Nattakam','Nattakam'),
+    ('Paippad','Paippad'),
+    ('Palai','Palai'),
+    ('Puthuppally','Puthuppally'),
     ('Vellavoor','Vellavoor'),
     # Add more choices as needed
     )
-    villlage = models.CharField(max_length=100, choices=VILLAGE_CHOICES, null=True)
-    taluka2 = models.CharField(max_length=100, null=True)
+    town2 = models.CharField(max_length=100, choices=TOWN_CHOICES, null=True)
+    district2 = models.CharField(max_length=100, null=True)
     state2 = models.CharField(max_length=100, null=True)
     pincode2 = models.CharField(max_length=10, null=True)
     
